@@ -1,7 +1,6 @@
 module
 public import Aeneas.Std.Core.Core
 public import Aeneas.Std.Core.Cmp
-public import Aeneas.Std.Scalar.Core
 public section
 
 /-!
@@ -81,69 +80,5 @@ def core.cmp.impls.PartialEqF32.ne (x y : Float32) : Bool := x != y
 def core.cmp.PartialEqF32 : core.cmp.PartialEq Float32 Float32 where
   eq := liftFun2 core.cmp.impls.PartialEqF32.eq
   ne := liftFun2 core.cmp.impls.PartialEqF32.ne
-
-/-! ## Casts (`as`)
-
-The semantics follow the Rust reference
-(https://doc.rust-lang.org/reference/expressions/operator-expr.html#numeric-cast):
-- float to integer rounds toward zero, sends NaN to `0`, and saturates at the integer type's
-  bounds;
-- integer to float rounds to the nearest float (ties to even); overflow gives an infinity;
-- `f32` to `f64` is exact, and `f64` to `f32` rounds to the nearest `f32` (ties to even).
-
-Every definition goes through Lean's logical float model (`Float.toModel`, `Float32.toModel`), so
-it can be reasoned about. Lean's own `Float.toFloat32` and `Float32.toFloat` are `opaque`. NaN
-payloads are not preserved.
--/
-
-open Float.Model in
-/-- Round an unpacked float to the given format (exact if it is representable). -/
-@[expose] def UnpackedFloat.roundToFormat (spec : Format) : UnpackedFloat → UnpackedFloat
-  | .finite s m e _ => UnpackedFloat.round spec s m e
-  | u => u
-
-open Float.Model in
-/-- Rust's float-to-integer rule on an unpacked float: truncate toward zero, NaN to `0`, and
-saturate to `[lo, hi]` (infinities included). -/
-@[expose] def UnpackedFloat.toIntSat (lo hi : Int) (u : UnpackedFloat) : Int :=
-  max lo (min hi (u.toInt lo hi))
-
-/-- `x as f32` for `x : f64`. -/
-@[expose] def Float.castToFloat32 (x : Float) : Float32 :=
-  Float32.ofModel (Float32.Model.pack (UnpackedFloat.roundToFormat .binary32 x.toModel.unpack))
-
-/-- `x as f64` for `x : f32` (exact). -/
-@[expose] def Float32.castToFloat (x : Float32) : Float :=
-  Float.ofModel (Float.Model.pack (UnpackedFloat.roundToFormat .binary64 x.toModel.unpack))
-
-/-- `x as uN` / `x as usize` for `x : f64`. -/
-@[expose] def Float.toUScalar (ty : UScalarTy) (x : Float) : UScalar ty :=
-  ⟨BitVec.ofInt ty.numBits (UnpackedFloat.toIntSat 0 (2 ^ ty.numBits - 1) x.toModel.unpack)⟩
-
-/-- `x as iN` / `x as isize` for `x : f64`. -/
-@[expose] def Float.toIScalar (ty : IScalarTy) (x : Float) : IScalar ty :=
-  ⟨BitVec.ofInt ty.numBits
-    (UnpackedFloat.toIntSat (-2 ^ (ty.numBits - 1)) (2 ^ (ty.numBits - 1) - 1) x.toModel.unpack)⟩
-
-/-- `x as uN` / `x as usize` for `x : f32`. -/
-@[expose] def Float32.toUScalar (ty : UScalarTy) (x : Float32) : UScalar ty :=
-  ⟨BitVec.ofInt ty.numBits (UnpackedFloat.toIntSat 0 (2 ^ ty.numBits - 1) x.toModel.unpack)⟩
-
-/-- `x as iN` / `x as isize` for `x : f32`. -/
-@[expose] def Float32.toIScalar (ty : IScalarTy) (x : Float32) : IScalar ty :=
-  ⟨BitVec.ofInt ty.numBits
-    (UnpackedFloat.toIntSat (-2 ^ (ty.numBits - 1)) (2 ^ (ty.numBits - 1) - 1) x.toModel.unpack)⟩
-
-/-- `x as f64` for an unsigned integer `x`. -/
-@[expose] def UScalar.toFloat {ty : UScalarTy} (x : UScalar ty) : Float := Float.ofNat x.val
-
-/-- `x as f32` for an unsigned integer `x`. -/
-@[expose] def UScalar.toFloat32 {ty : UScalarTy} (x : UScalar ty) : Float32 := Float32.ofNat x.val
-
-/-- `x as f64` for a signed integer `x`. -/
-@[expose] def IScalar.toFloat {ty : IScalarTy} (x : IScalar ty) : Float := Float.ofInt x.val
-
-/-- `x as f32` for a signed integer `x`. -/
-@[expose] def IScalar.toFloat32 {ty : IScalarTy} (x : IScalar ty) : Float32 := Float32.ofInt x.val
 
 end Aeneas.Std

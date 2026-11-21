@@ -1,3 +1,5 @@
-# Partial output of the known-failure test float32-coq-unsupported.rs
+# Partial outputs of the known-failure tests float32-coq-unsupported.rs and
+# float-cast-coq-unsupported.rs
 /Primitives.v
 /Float32CoqUnsupported.v
+/FloatCastCoqUnsupported.v

@@ -395,10 +395,10 @@ let lean_builtin_funs =
     (* file: "Aeneas/Std/Core/Core.lean", line: 115 *)
     mk_fun "core::clone::impls::{core::clone::Clone<&'0 @T>}::clone"
       "core.clone.impls.CloneShared.clone";
-    (* file: "Aeneas/Std/Float.lean", line: 62 *)
+    (* file: "Aeneas/Std/Float.lean", line: 61 *)
     mk_fun "core::clone::impls::{core::clone::Clone<f32>}::clone"
       "core.clone.impls.CloneF32.clone" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 28 *)
+    (* file: "Aeneas/Std/Float.lean", line: 27 *)
     mk_fun "core::clone::impls::{core::clone::Clone<f64>}::clone"
       "core.clone.impls.CloneF64.clone" ~can_fail:false;
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 23 *)
@@ -438,16 +438,16 @@ let lean_builtin_funs =
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 237 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialEq<bool, bool>}::eq"
       "core.cmp.impls.PartialEqBool.eq";
-    (* file: "Aeneas/Std/Float.lean", line: 74 *)
+    (* file: "Aeneas/Std/Float.lean", line: 73 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialEq<f32, f32>}::eq"
       "core.cmp.impls.PartialEqF32.eq" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 77 *)
+    (* file: "Aeneas/Std/Float.lean", line: 76 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialEq<f32, f32>}::ne"
       "core.cmp.impls.PartialEqF32.ne" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 40 *)
+    (* file: "Aeneas/Std/Float.lean", line: 39 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialEq<f64, f64>}::eq"
       "core.cmp.impls.PartialEqF64.eq" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 43 *)
+    (* file: "Aeneas/Std/Float.lean", line: 42 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialEq<f64, f64>}::ne"
       "core.cmp.impls.PartialEqF64.ne" ~can_fail:false;
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 282 *)
@@ -490,13 +490,13 @@ let lean_builtin_funs =
     (* file: "Aeneas/Std/Core/Default.lean", line: 12 *)
     mk_fun "core::default::{core::default::Default<bool>}::default"
       "core.default.DefaultBool.default";
-    (* file: "Aeneas/Std/Float.lean", line: 56 *)
+    (* file: "Aeneas/Std/Float.lean", line: 55 *)
     mk_fun "core::f32::{f32}::abs" "core.f32.abs" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 53 *)
+    (* file: "Aeneas/Std/Float.lean", line: 52 *)
     mk_fun "core::f32::{f32}::is_finite" "core.f32.is_finite" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 22 *)
+    (* file: "Aeneas/Std/Float.lean", line: 21 *)
     mk_fun "core::f64::{f64}::abs" "core.f64.abs" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 19 *)
+    (* file: "Aeneas/Std/Float.lean", line: 18 *)
     mk_fun "core::f64::{f64}::is_finite" "core.f64.is_finite" ~can_fail:false;
     (* file: "Aeneas/Std/Scalar/Display.lean", line: 58 *)
     mk_fun "core::fmt::num::imp::{core::fmt::Display<i128>}::fmt"
@@ -1340,9 +1340,9 @@ let lean_builtin_funs =
       "core.str.iter.IteratorChars.next";
     (* file: "Aeneas/Std/StringIter.lean", line: 31 *)
     mk_fun "core::str::{str}::chars" "core.str.Str.chars";
-    (* file: "Aeneas/Std/Float.lean", line: 59 *)
+    (* file: "Aeneas/Std/Float.lean", line: 58 *)
     mk_fun "std::f32::{f32}::sqrt" "std.f32.sqrt" ~can_fail:false;
-    (* file: "Aeneas/Std/Float.lean", line: 25 *)
+    (* file: "Aeneas/Std/Float.lean", line: 24 *)
     mk_fun "std::f64::{f64}::sqrt" "std.f64.sqrt" ~can_fail:false;
     (* file: "Aeneas/Std/Std/Io.lean", line: 7 *)
     mk_fun "std::io::stdio::_print" "std.io.stdio._print";
@@ -1564,9 +1564,9 @@ let lean_builtin_trait_impls =
       ~keep_trait_clauses:(Some [ true; false ]);
     (* file: "Aeneas/Std/Core/Core.lean", line: 36 *)
     mk_trait_impl "core::clone::Clone<bool>" "core.clone.CloneBool";
-    (* file: "Aeneas/Std/Float.lean", line: 65 *)
+    (* file: "Aeneas/Std/Float.lean", line: 64 *)
     mk_trait_impl "core::clone::Clone<f32>" "core.clone.CloneF32";
-    (* file: "Aeneas/Std/Float.lean", line: 31 *)
+    (* file: "Aeneas/Std/Float.lean", line: 30 *)
     mk_trait_impl "core::clone::Clone<f64>" "core.clone.CloneF64";
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 255 *)
     mk_trait_impl "core::cmp::PartialEq<&'a @A, &'b @B>"
@@ -1584,9 +1584,9 @@ let lean_builtin_trait_impls =
       ~keep_params:(Some [ true; true; false; false ]);
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 240 *)
     mk_trait_impl "core::cmp::PartialEq<bool, bool>" "core.cmp.PartialEqBool";
-    (* file: "Aeneas/Std/Float.lean", line: 80 *)
+    (* file: "Aeneas/Std/Float.lean", line: 79 *)
     mk_trait_impl "core::cmp::PartialEq<f32, f32>" "core.cmp.PartialEqF32";
-    (* file: "Aeneas/Std/Float.lean", line: 46 *)
+    (* file: "Aeneas/Std/Float.lean", line: 45 *)
     mk_trait_impl "core::cmp::PartialEq<f64, f64>" "core.cmp.PartialEqF64";
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 287 *)
     mk_trait_impl "core::cmp::PartialOrd<&'a @A, &'b @B>"
@@ -1764,9 +1764,9 @@ let lean_builtin_trait_impls =
     mk_trait_impl "core::marker::Copy<[@T; @N]>" "Array.Insts.CoreMarkerCopy";
     (* file: "Aeneas/Std/Core/Core.lean", line: 46 *)
     mk_trait_impl "core::marker::Copy<bool>" "core.marker.CopyBool";
-    (* file: "Aeneas/Std/Float.lean", line: 70 *)
+    (* file: "Aeneas/Std/Float.lean", line: 69 *)
     mk_trait_impl "core::marker::Copy<f32>" "core.marker.CopyF32";
-    (* file: "Aeneas/Std/Float.lean", line: 36 *)
+    (* file: "Aeneas/Std/Float.lean", line: 35 *)
     mk_trait_impl "core::marker::Copy<f64>" "core.marker.CopyF64";
     (* file: "Aeneas/Std/Alloc/Boxed.lean", line: 20 *)
     mk_trait_impl "core::ops::deref::Deref<Box<@T>, @T>"

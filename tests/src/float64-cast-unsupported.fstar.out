@@ -2,5 +2,5 @@
 [[92mInfo[39m ] Copied:    tests/fstar/Primitives.fst
 [[91mError[39m] Floating-point casts are only supported by the Lean backend
 Source: 'tests/src/float64-cast-unsupported.rs', lines 5:0-7:1
-Compiler source: extract/Extract.ml, line 521
+Compiler source: extract/Extract.ml, line 510
 

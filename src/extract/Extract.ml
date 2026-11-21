@@ -408,6 +408,11 @@ let extract_cast_kind_hol4 (span : Meta.span)
            mk_i32 (u32_to_int x)
          ]}
       *)
+      (match (src, tgt) with
+      | TFloat _, _ | _, TFloat _ ->
+          [%craise] span
+            "Floating-point casts are only supported by the Lean backend"
+      | _ -> ());
       if inside then F.pp_print_string fmt "(";
       F.pp_print_string fmt ("mk_" ^ scalar_name tgt);
       F.pp_print_space fmt ();
@@ -435,6 +440,9 @@ let extract_cast_kind_gen (span : Meta.span)
         else
           StringUtils.capitalize_first_letter
             (PrintPure.integer_type_to_string ty)
+      in
+      let scalar_kind_name (ty : integer_type) : string =
+        if Scalars.integer_type_is_signed ty then "IScalar" else "UScalar"
       in
       if inside then F.pp_print_string fmt "(";
       (* Rem.: the source type is an implicit parameter *)
@@ -484,39 +492,20 @@ let extract_cast_kind_gen (span : Meta.span)
                 boolean), it gets compiled to [b] (i.e., no cast
                 is introduced). *)
              [%craise] span "Unexpected cast: bool to bool"
-         | TFloat src, TFloat tgt when backend () = Lean -> (
-             (* Rust rounds f64 -> f32 to nearest; f32 -> f64 is exact. *)
-             match (src, tgt) with
-             | F64, F32 -> ("Float.castToFloat32", None, None)
-             | F32, F64 -> ("Float32.castToFloat", None, None)
-             | _ ->
-                 [%craise] span
-                   "Unexpected cast between identical or unsupported float \
-                    types")
+         (* Float casts (Lean only), defined in [Aeneas/Std/FloatCasts.lean].
+            The names follow [float_name]: [Float.castToFloat32],
+            [Float.toUScalar .U32], [IScalar.toFloat32], ... rustc never emits
+            a cast between identical float types. *)
+         | TFloat src, TFloat tgt when backend () = Lean ->
+             (float_name src ^ ".castTo" ^ float_name tgt, None, None)
          | TFloat src, (TInt _ | TUInt _) when backend () = Lean ->
-             (* Rust truncates toward zero, sends NaN to 0 and saturates. *)
              let tgt = literal_as_integer tgt in
-             let cast_str =
-               float_name src
-               ^
-               if Scalars.integer_type_is_signed tgt then ".toIScalar"
-               else ".toUScalar"
-             in
-             (cast_str, None, Some (integer_type_to_string tgt))
+             ( float_name src ^ ".to" ^ scalar_kind_name tgt,
+               None,
+               Some (integer_type_to_string tgt) )
          | (TInt _ | TUInt _), TFloat tgt when backend () = Lean ->
-             (* Rust rounds to the nearest float. *)
              let src = literal_as_integer src in
-             let scalar =
-               if Scalars.integer_type_is_signed src then "IScalar"
-               else "UScalar"
-             in
-             let to_float =
-               match tgt with
-               | F64 -> ".toFloat"
-               | F32 -> ".toFloat32"
-               | F16 | F128 -> [%internal_error] span
-             in
-             (scalar ^ to_float, None, None)
+             (scalar_kind_name src ^ ".to" ^ float_name tgt, None, None)
          | TFloat _, _ | _, TFloat _ ->
              [%craise] span
                "Floating-point casts are only supported by the Lean backend"

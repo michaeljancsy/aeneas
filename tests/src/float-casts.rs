@@ -55,6 +55,21 @@ pub fn f32_to_isize(x: f32) -> isize {
     x as isize
 }
 
+pub fn f32_to_i128(x: f32) -> i128 {
+    x as i128
+}
+pub fn u32_to_f32(x: u32) -> f32 {
+    x as f32
+}
+pub fn u64_to_f32(x: u64) -> f32 {
+    x as f32
+}
+pub fn i64_to_f32(x: i64) -> f32 {
+    x as f32
+}
+pub fn i128_to_f64(x: i128) -> f64 {
+    x as f64
+}
 pub fn u8_to_f32(x: u8) -> f32 {
     x as f32
 }
@@ -150,6 +165,48 @@ pub fn test_int_to_float() {
     assert!(div32(1.0, i32_to_f32(0)) == div32(1.0, 0.0));
 }
 
+#[verify::test]
+pub fn test_edge_cases() {
+    let nan32 = div32(0.0, 0.0);
+    let inf32 = div32(1.0, 0.0);
+    let ninf32 = div32(-1.0, 0.0);
+    let inf64 = div64(1.0, 0.0);
+    // f32 sources: NaN, infinities, saturation and truncation.
+    assert!(f32_to_u32(nan32) == 0);
+    assert!(f32_to_u32(inf32) == 4294967295);
+    assert!(f32_to_i16(nan32) == 0);
+    assert!(f32_to_i16(ninf32) == -32768);
+    // isize saturation depends on the platform's pointer width, so only a portable value here.
+    assert!(f32_to_isize(-100000.5) == -100000);
+    assert!(f32_to_i128(ninf32) == -170141183460469231731687303715884105728);
+    assert!(f32_to_i128(nan32) == 0);
+    // Truncation (not saturation) just below the top of the range.
+    assert!(f64_to_u8(254.9) == 254);
+    assert!(f64_to_i8(126.9) == 126);
+    // 128-bit saturation.
+    assert!(f64_to_u128(inf64) == 340282366920938463463374607431768211455);
+    assert!(f64_to_u128(-1.0) == 0);
+    assert!(f64_to_i128(1e40) == 170141183460469231731687303715884105727);
+    // Signed zeros, observed through division.
+    assert!(div32(1.0, f64_to_f32(-0.0)) == ninf32);
+    assert!(div32(1.0, f64_to_f32(1e-50)) == inf32);
+    assert!(div64(1.0, f32_to_f64(-0.0)) == div64(-1.0, 0.0));
+    assert!(div32(1.0, u32_to_f32(0)) == inf32);
+    assert!(div64(1.0, i128_to_f64(0)) == inf64);
+    // NaN stays NaN from f32 to f64.
+    let nan64 = f32_to_f64(nan32);
+    assert!(nan64 != nan64);
+    // Rounding of wide integers.
+    assert!(u64_to_f32(16777217) == 16777216.0);
+    assert!(i64_to_f32(-16777219) == -16777220.0);
+    assert!(i128_to_f64(-1267650600228229401496703205377) == -1267650600228229401496703205376.0);
+    assert!(u128_to_f64(18446744073709551617) == 18446744073709551616.0);
+    // The u128 -> f32 overflow boundary: 2^128 - 2^103 is a tie that rounds to infinity.
+    assert!(u128_to_f32(340282356779733661637539395458142568448) == inf32);
+    assert!(u128_to_f32(340282356779733661637539395458142568447) == 3.40282347e38);
+    assert!(u128_to_f32(340282346638528859811704183484516925440) == 3.40282347e38);
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -157,5 +214,6 @@ mod tests {
         super::test_float_to_float();
         super::test_float_to_int();
         super::test_int_to_float();
+        super::test_edge_cases();
     }
 }

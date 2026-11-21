@@ -116,62 +116,92 @@ def f32_to_i16 (x : Float32) : Result Std.I16 := do
 def f32_to_isize (x : Float32) : Result Std.Isize := do
   ok (Float32.toIScalar .Isize x)
 
-/-- [float_casts::u8_to_f32]:
+/-- [float_casts::f32_to_i128]:
     Source: 'tests/src/float-casts.rs', lines 58:0-60:1
+    Visibility: public -/
+def f32_to_i128 (x : Float32) : Result Std.I128 := do
+  ok (Float32.toIScalar .I128 x)
+
+/-- [float_casts::u32_to_f32]:
+    Source: 'tests/src/float-casts.rs', lines 61:0-63:1
+    Visibility: public -/
+def u32_to_f32 (x : Std.U32) : Result Float32 := do
+  ok (UScalar.toFloat32 x)
+
+/-- [float_casts::u64_to_f32]:
+    Source: 'tests/src/float-casts.rs', lines 64:0-66:1
+    Visibility: public -/
+def u64_to_f32 (x : Std.U64) : Result Float32 := do
+  ok (UScalar.toFloat32 x)
+
+/-- [float_casts::i64_to_f32]:
+    Source: 'tests/src/float-casts.rs', lines 67:0-69:1
+    Visibility: public -/
+def i64_to_f32 (x : Std.I64) : Result Float32 := do
+  ok (IScalar.toFloat32 x)
+
+/-- [float_casts::i128_to_f64]:
+    Source: 'tests/src/float-casts.rs', lines 70:0-72:1
+    Visibility: public -/
+def i128_to_f64 (x : Std.I128) : Result Float := do
+  ok (IScalar.toFloat x)
+
+/-- [float_casts::u8_to_f32]:
+    Source: 'tests/src/float-casts.rs', lines 73:0-75:1
     Visibility: public -/
 def u8_to_f32 (x : Std.U8) : Result Float32 := do
   ok (UScalar.toFloat32 x)
 
 /-- [float_casts::u64_to_f64]:
-    Source: 'tests/src/float-casts.rs', lines 61:0-63:1
+    Source: 'tests/src/float-casts.rs', lines 76:0-78:1
     Visibility: public -/
 def u64_to_f64 (x : Std.U64) : Result Float := do
   ok (UScalar.toFloat x)
 
 /-- [float_casts::u128_to_f32]:
-    Source: 'tests/src/float-casts.rs', lines 64:0-66:1
+    Source: 'tests/src/float-casts.rs', lines 79:0-81:1
     Visibility: public -/
 def u128_to_f32 (x : Std.U128) : Result Float32 := do
   ok (UScalar.toFloat32 x)
 
 /-- [float_casts::u128_to_f64]:
-    Source: 'tests/src/float-casts.rs', lines 67:0-69:1
+    Source: 'tests/src/float-casts.rs', lines 82:0-84:1
     Visibility: public -/
 def u128_to_f64 (x : Std.U128) : Result Float := do
   ok (UScalar.toFloat x)
 
 /-- [float_casts::usize_to_f64]:
-    Source: 'tests/src/float-casts.rs', lines 70:0-72:1
+    Source: 'tests/src/float-casts.rs', lines 85:0-87:1
     Visibility: public -/
 def usize_to_f64 (x : Std.Usize) : Result Float := do
   ok (UScalar.toFloat x)
 
 /-- [float_casts::i32_to_f32]:
-    Source: 'tests/src/float-casts.rs', lines 73:0-75:1
+    Source: 'tests/src/float-casts.rs', lines 88:0-90:1
     Visibility: public -/
 def i32_to_f32 (x : Std.I32) : Result Float32 := do
   ok (IScalar.toFloat32 x)
 
 /-- [float_casts::i64_to_f64]:
-    Source: 'tests/src/float-casts.rs', lines 76:0-78:1
+    Source: 'tests/src/float-casts.rs', lines 91:0-93:1
     Visibility: public -/
 def i64_to_f64 (x : Std.I64) : Result Float := do
   ok (IScalar.toFloat x)
 
 /-- [float_casts::i128_to_f32]:
-    Source: 'tests/src/float-casts.rs', lines 79:0-81:1
+    Source: 'tests/src/float-casts.rs', lines 94:0-96:1
     Visibility: public -/
 def i128_to_f32 (x : Std.I128) : Result Float32 := do
   ok (IScalar.toFloat32 x)
 
 /-- [float_casts::isize_to_f32]:
-    Source: 'tests/src/float-casts.rs', lines 82:0-84:1
+    Source: 'tests/src/float-casts.rs', lines 97:0-99:1
     Visibility: public -/
 def isize_to_f32 (x : Std.Isize) : Result Float32 := do
   ok (IScalar.toFloat32 x)
 
 /-- [float_casts::test_float_to_float]:
-    Source: 'tests/src/float-casts.rs', lines 87:0-103:1
+    Source: 'tests/src/float-casts.rs', lines 102:0-118:1
     Visibility: public -/
 def test_float_to_float : Result Unit := do
   let fl ← f64_to_f32 (Float.ofBits 4591870180066957722)
@@ -208,7 +238,7 @@ def test_float_to_float : Result Unit := do
 #guard (test_float_to_float).reducesTo ()
 
 /-- [float_casts::test_float_to_int]:
-    Source: 'tests/src/float-casts.rs', lines 106:0-134:1
+    Source: 'tests/src/float-casts.rs', lines 121:0-149:1
     Visibility: public -/
 def test_float_to_int : Result Unit := do
   let nan ← div64 (Float.ofBits 0) (Float.ofBits 0)
@@ -268,7 +298,7 @@ def test_float_to_int : Result Unit := do
 #guard (test_float_to_int).reducesTo ()
 
 /-- [float_casts::test_int_to_float]:
-    Source: 'tests/src/float-casts.rs', lines 137:0-151:1
+    Source: 'tests/src/float-casts.rs', lines 152:0-166:1
     Visibility: public -/
 def test_int_to_float : Result Unit := do
   let fl ← u8_to_f32 255#u8
@@ -302,5 +332,73 @@ def test_int_to_float : Result Unit := do
 
 /- Unit test for [float_casts::test_int_to_float] -/
 #guard (test_int_to_float).reducesTo ()
+
+/-- [float_casts::test_edge_cases]:
+    Source: 'tests/src/float-casts.rs', lines 169:0-208:1
+    Visibility: public -/
+def test_edge_cases : Result Unit := do
+  let nan32 ← div32 (Float32.ofBits 0) (Float32.ofBits 0)
+  let inf32 ← div32 (Float32.ofBits 1065353216) (Float32.ofBits 0)
+  let ninf32 ← div32 (Float32.ofBits 3212836864) (Float32.ofBits 0)
+  let inf64 ← div64 (Float.ofBits 4607182418800017408) (Float.ofBits 0)
+  let i ← f32_to_u32 nan32
+  massert (i = 0#u32)
+  let i1 ← f32_to_u32 inf32
+  massert (i1 = 4294967295#u32)
+  let i2 ← f32_to_i16 nan32
+  massert (i2 = 0#i16)
+  let i3 ← f32_to_i16 ninf32
+  massert (i3 = (-32768)#i16)
+  let i4 ← f32_to_isize (Float32.ofBits 3351466048)
+  massert (i4 = (-100000)#isize)
+  let i5 ← f32_to_i128 ninf32
+  massert (i5 = (-170141183460469231731687303715884105728)#i128)
+  let i6 ← f32_to_i128 nan32
+  massert (i6 = 0#i128)
+  let i7 ← f64_to_u8 (Float.ofBits 4643172513009683661)
+  massert (i7 = 254#u8)
+  let i8 ← f64_to_i8 (Float.ofBits 4638630210573015450)
+  massert (i8 = 126#i8)
+  let i9 ← f64_to_u128 inf64
+  massert (i9 = 340282366920938463463374607431768211455#u128)
+  let i10 ← f64_to_u128 (Float.ofBits 13830554455654793216)
+  massert (i10 = 0#u128)
+  let i11 ← f64_to_i128 (Float.ofBits 5205425776111082661)
+  massert (i11 = 170141183460469231731687303715884105727#i128)
+  let fl ← f64_to_f32 (Float.ofBits 9223372036854775808)
+  let fl1 ← div32 (Float32.ofBits 1065353216) fl
+  massert (fl1 == ninf32)
+  let fl2 ← f64_to_f32 (Float.ofBits 3859002664735258655)
+  let fl3 ← div32 (Float32.ofBits 1065353216) fl2
+  massert (fl3 == inf32)
+  let fl4 ← f32_to_f64 (Float32.ofBits 2147483648)
+  let fl5 ← div64 (Float.ofBits 4607182418800017408) fl4
+  let fl6 ← div64 (Float.ofBits 13830554455654793216) (Float.ofBits 0)
+  massert (fl5 == fl6)
+  let fl7 ← u32_to_f32 0#u32
+  let fl8 ← div32 (Float32.ofBits 1065353216) fl7
+  massert (fl8 == inf32)
+  let fl9 ← i128_to_f64 0#i128
+  let fl10 ← div64 (Float.ofBits 4607182418800017408) fl9
+  massert (fl10 == inf64)
+  let nan64 ← f32_to_f64 nan32
+  massert (nan64 != nan64)
+  let fl11 ← u64_to_f32 16777217#u64
+  massert (fl11 == (Float32.ofBits 1266679808))
+  let fl12 ← i64_to_f32 (-16777219)#i64
+  massert (fl12 == (Float32.ofBits 3414163458))
+  let fl13 ← i128_to_f64 (-1267650600228229401496703205377)#i128
+  massert (fl13 == (Float.ofBits 14280914418391842816))
+  let fl14 ← u128_to_f64 18446744073709551617#u128
+  massert (fl14 == (Float.ofBits 4895412794951729152))
+  let fl15 ← u128_to_f32 340282356779733661637539395458142568448#u128
+  massert (fl15 == inf32)
+  let fl16 ← u128_to_f32 340282356779733661637539395458142568447#u128
+  massert (fl16 == (Float32.ofBits 2139095039))
+  let fl17 ← u128_to_f32 340282346638528859811704183484516925440#u128
+  massert (fl17 == (Float32.ofBits 2139095039))
+
+/- Unit test for [float_casts::test_edge_cases] -/
+#guard (test_edge_cases).reducesTo ()
 
 end float_casts
