@@ -225,6 +225,28 @@ Scalar literals use the `#type` suffix notation: `1#i32`, `0#u64`, etc.
 Each scalar value `s` has a `.val` field that extracts the underlying natural number
 (or integer), and arithmetic operations return `Result` to account for overflow.
 
+#### Floating-point types (Lean backend only)
+
+| Rust  | Lean      |
+|-------|-----------|
+| `f32` | `Float32` |
+| `f64` | `Float`   |
+
+Float arithmetic (`+`, `-`, `*`, `/`, negation) follows IEEE 754 and never fails:
+overflow gives an infinity, and invalid operations give NaN. `==` and `!=` are IEEE
+equality, so `NaN != NaN` and `0.0 == -0.0`. Float literals are emitted as exact bit
+patterns, for example `Float32.ofBits 1036831949` for `0.1f32`.
+
+Not yet supported:
+- casts to or from float types (`as`);
+- `%` on floats;
+- NaN literals;
+- `f16` and `f128`;
+- other backends.
+
+Standard-library float constants such as `f32::EPSILON` have no Lean model and are
+extracted as axioms, so write their values as literals.
+
 ### 3.3 Collections and Containers
 
 | Rust                         | Lean                          |
