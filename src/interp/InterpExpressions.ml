@@ -639,6 +639,12 @@ let eval_two_operands (config : config) (span : Meta.span) (op1 : operand)
   in
   (res, ctx, cc)
 
+(** There is no concrete IEEE-754 evaluator yet: structural equality on float
+    literals is not IEEE equality, and float operations are not computed. *)
+let concrete_float_unsupported =
+  "Concrete floating-point evaluation is not supported; use symbolic \
+   translation"
+
 let eval_unary_op_concrete (config : config) (span : Meta.span) (unop : unop)
     (op : operand) (ctx : eval_ctx) :
     (tvalue, eval_error) result
@@ -710,6 +716,9 @@ let eval_unary_op_concrete (config : config) (span : Meta.span) (unop : unop)
         let value = VLiteral (VBool b) in
         let ty = TScalar TBool in
         Ok { ty; value }
+    | _, VLiteral (VFloat _) | Cast (CastScalar (TFloat _)), _ ->
+        (* As for binary operations: no concrete IEEE evaluator yet. *)
+        [%craise] span concrete_float_unsupported
     | _ -> [%craise] span ("Invalid input for unop: " ^ unop_to_string ctx unop)
   in
   (r, ctx, cc)
@@ -1037,9 +1046,7 @@ let eval_binary_op_concrete_compute (span : Meta.span) (binop : binop)
   if is_float v1 || is_float v2 then
     (* Structural equality is not IEEE equality. Until a concrete IEEE evaluator
        is implemented, reject rather than treating NaN as equal to itself. *)
-    [%craise] span
-      "Concrete floating-point evaluation is not supported; use symbolic \
-       translation"
+    [%craise] span concrete_float_unsupported
   else if binop = Eq || binop = Ne then (
     (* Equality operations *)
     [%cassert] span (v1.ty = v2.ty)

@@ -1,0 +1,5 @@
+[[92mInfo[39m ] Imported: tests/llbc/float64_cast_fstar_unsupported.llbc
+[[91mError[39m] Floating-point casts are only supported by the Lean backend
+Source: 'tests/src/float64-cast-fstar-unsupported.rs', lines 5:0-7:1
+Compiler source: symbolic/SymbolicToPureExpressions.ml, line 602
+

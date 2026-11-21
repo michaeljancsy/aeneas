@@ -26,27 +26,19 @@ let extract_str (_span : Meta.span) (fmt : F.formatter) ~(inside : bool)
   extract_pure_string fmt s;
   if inside then F.pp_print_string fmt ")"
 
-(** Format a constant value.
-
-    Inputs:
-    - formatter
-    - [is_pattern]: if [true], it means we are generating a (match) pattern
-    - [inside]: if [true], the value should be wrapped in parentheses if it is
-      made of an application (ex.: [U32 3])
-    - the constant value *)
-(** The binary32 bits of a float literal, which Charon serialized as the
-    decimal string [float_value] and which was parsed to the binary64 [value].
+(** The binary32 bits of a float literal, which Charon serialized as the decimal
+    string [float_value] and which was parsed to the binary64 [value].
 
     Parsing rounds the decimal to binary64, so rounding [value] to binary32
-    rounds twice. That gives the wrong result only if [value] lands exactly on
-    a binary32 rounding boundary: a midpoint between two binary32 values, or
-    the overflow threshold. Charon's decimals identify a unique binary32 value
-    (at most 9 significant digits), so they are never near one. As a check,
-    this rejects any value within a quarter of the binary32 spacing above the
-    result of a boundary. Just below a power of two the boundary is exactly
-    that far away, so the margin there is zero, but the strict comparison still
-    rejects a value on the boundary, which is the only case that matters. It
-    also rejects any finite value that rounds to infinity. *)
+    rounds twice. That gives the wrong result only if [value] lands exactly on a
+    binary32 rounding boundary: a midpoint between two binary32 values, or the
+    overflow threshold. Charon's decimals identify a unique binary32 value (at
+    most 9 significant digits), so they are never near one. As a check, this
+    rejects any value within a quarter of the binary32 spacing above the result
+    of a boundary. Just below a power of two the boundary is exactly that far
+    away, so the margin there is zero, but the strict comparison still rejects a
+    value on the boundary, which is the only case that matters. It also rejects
+    any finite value that rounds to infinity. *)
 let binary32_bits_of_decimal (span : Meta.span) (float_value : string)
     (value : float) : Z.t =
   let bits32 = Int32.bits_of_float value in
@@ -70,6 +62,14 @@ let binary32_bits_of_decimal (span : Meta.span) (float_value : string)
        ("Binary32 literal is too close to a rounding boundary: " ^ float_value));
   Z.of_int32 bits32
 
+(** Format a constant value.
+
+    Inputs:
+    - formatter
+    - [is_pattern]: if [true], it means we are generating a (match) pattern
+    - [inside]: if [true], the value should be wrapped in parentheses if it is
+      made of an application (ex.: [U32 3])
+    - the constant value *)
 let extract_literal (span : Meta.span) (fmt : F.formatter) ~(is_pattern : bool)
     ~(inside : bool) (cv : literal) : unit =
   match cv with

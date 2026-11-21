@@ -408,6 +408,10 @@ let extract_cast_kind_hol4 (span : Meta.span)
            mk_i32 (u32_to_int x)
          ]}
       *)
+      (* Float casts are rejected for HOL4 in [SymbolicToPureExpressions]. *)
+      (match (src, tgt) with
+      | TFloat _, _ | _, TFloat _ -> [%internal_error] span
+      | _ -> ());
       if inside then F.pp_print_string fmt "(";
       F.pp_print_string fmt ("mk_" ^ scalar_name tgt);
       F.pp_print_space fmt ();
@@ -436,6 +440,9 @@ let extract_cast_kind_gen (span : Meta.span)
           StringUtils.capitalize_first_letter
             (PrintPure.integer_type_to_string ty)
       in
+      let scalar_kind_name (ty : integer_type) : string =
+        if Scalars.integer_type_is_signed ty then "IScalar" else "UScalar"
+      in
       if inside then F.pp_print_string fmt "(";
       (* Rem.: the source type is an implicit parameter *)
       (* Different cases depending on the conversion *)
@@ -448,12 +455,12 @@ let extract_cast_kind_gen (span : Meta.span)
                match backend () with
                | Coq | FStar -> "scalar_cast"
                | Lean ->
-                   let signed_src = Scalars.integer_type_is_signed src in
-                   let signed_tgt = Scalars.integer_type_is_signed tgt in
-                   if signed_src = signed_tgt then
-                     if signed_src then "IScalar.cast" else "UScalar.cast"
-                   else if signed_src then "IScalar.hcast"
-                   else "UScalar.hcast"
+                   let same_signedness =
+                     Scalars.integer_type_is_signed src
+                     = Scalars.integer_type_is_signed tgt
+                   in
+                   scalar_kind_name src
+                   ^ if same_signedness then ".cast" else ".hcast"
                | HOL4 -> admit_string __FILE__ __LINE__ span "Unreachable"
              in
              let src =
@@ -467,10 +474,7 @@ let extract_cast_kind_gen (span : Meta.span)
              let cast_str =
                match backend () with
                | Coq | FStar -> "scalar_cast_bool"
-               | Lean ->
-                   if Scalars.integer_type_is_signed tgt then
-                     "IScalar.cast_fromBool"
-                   else "UScalar.cast_fromBool"
+               | Lean -> scalar_kind_name tgt ^ ".cast_fromBool"
                | HOL4 -> admit_string __FILE__ __LINE__ span "Unreachable"
              in
              let tgt = integer_type_to_string tgt in
@@ -484,8 +488,24 @@ let extract_cast_kind_gen (span : Meta.span)
                 boolean), it gets compiled to [b] (i.e., no cast
                 is introduced). *)
              [%craise] span "Unexpected cast: bool to bool"
+         (* Float casts (Lean only), defined in [Aeneas/Std/FloatCasts.lean].
+            The names follow [float_name]: [Float.castToFloat32],
+            [Float.toUScalar .U32], [IScalar.toFloat32], ... rustc never emits
+            a cast between identical float types. *)
+         | TFloat src, TFloat tgt when backend () = Lean ->
+             [%sanity_check] span (src <> tgt);
+             (float_name src ^ ".castTo" ^ float_name tgt, None, None)
+         | TFloat src, (TInt _ | TUInt _) when backend () = Lean ->
+             let tgt = literal_as_integer tgt in
+             ( float_name src ^ ".to" ^ scalar_kind_name tgt,
+               None,
+               Some (integer_type_to_string tgt) )
+         | (TInt _ | TUInt _), TFloat tgt when backend () = Lean ->
+             let src = literal_as_integer src in
+             (scalar_kind_name src ^ ".to" ^ float_name tgt, None, None)
          | TFloat _, _ | _, TFloat _ ->
-             [%craise] span "Floating-point casts are not supported"
+             (* Rejected for other backends in [SymbolicToPureExpressions]. *)
+             [%internal_error] span
          | _ -> [%craise] span "Unreachable"
        in
        (* Print the name of the function *)

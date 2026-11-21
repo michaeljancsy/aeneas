@@ -1,0 +1,5 @@
+[[92mInfo[39m ] Imported: tests/llbc/float_casts_concrete_unsupported.llbc
+[[91mError[39m] Concrete floating-point evaluation is not supported; use symbolic translation
+Source: 'tests/src/float-casts-concrete-unsupported.rs', lines 6:4-6:12
+Compiler source: interp/InterpExpressions.ml, line 721
+

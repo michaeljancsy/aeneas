@@ -1,0 +1,5 @@
+[[92mInfo[39m ] Imported: tests/llbc/float_cast_coq_unsupported.llbc
+[[91mError[39m] Floating-point casts are only supported by the Lean backend
+Source: 'tests/src/float-cast-coq-unsupported.rs', lines 4:0-6:1
+Compiler source: symbolic/SymbolicToPureExpressions.ml, line 602
+
