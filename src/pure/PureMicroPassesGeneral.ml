@@ -735,6 +735,7 @@ let lift_binop (binop : binop) : bool =
   | FloatSub _
   | FloatMul _
   | FloatDiv _
+  | FloatRem _
   | Eq _
   | Lt _
   | Le _

@@ -1196,7 +1196,7 @@ let eval_binary_op_symbolic (config : config) (span : Meta.span) (binop : binop)
       | TScalar (TFloat fty1), TScalar (TFloat fty2) when fty1 = fty2 -> (
           match binop with
           | Lt | Le | Ge | Gt -> TScalar TBool
-          | Add _ | Sub _ | Mul _ | Div _ -> TScalar (TFloat fty1)
+          | Add _ | Sub _ | Mul _ | Div _ | Rem _ -> TScalar (TFloat fty1)
           | _ -> [%craise] span "Unsupported floating-point operation")
       | TScalar lty1, TScalar lty2
         when scalar_type_is_integer lty1 && scalar_type_is_integer lty2 -> (

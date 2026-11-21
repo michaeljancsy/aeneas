@@ -251,8 +251,13 @@ not kept); compiled code runs the native conversion, which may keep them. The ca
 128-bit integers are computed with Lean's logical float model, so evaluating them is
 slower than the others.
 
+The remainder `%` follows Rust, which is C's `fmod`: `x % y` is `x - trunc(x / y) * y`
+computed exactly (the result is always representable), with the sign of `x`, also when
+it is zero. It is NaN if `x` is infinite, `y` is zero, or either is NaN, and it is `x`
+if `y` is infinite and `x` is finite. It never fails. It is translated to `Float.rem`
+and `Float32.rem`, defined through Lean's logical float model.
+
 Not yet supported:
-- `%` on floats;
 - NaN literals;
 - `f16` and `f128`;
 - concrete evaluation of float code (for example with `-test-units`).

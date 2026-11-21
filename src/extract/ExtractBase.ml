@@ -968,7 +968,8 @@ let named_binop_name (binop : binop) : string =
   | FloatSub ty when backend () = Lean -> float_name ty ^ ".sub"
   | FloatMul ty when backend () = Lean -> float_name ty ^ ".mul"
   | FloatDiv ty when backend () = Lean -> float_name ty ^ ".div"
-  | FloatAdd _ | FloatSub _ | FloatMul _ | FloatDiv _ ->
+  | FloatRem ty when backend () = Lean -> float_name ty ^ ".rem"
+  | FloatAdd _ | FloatSub _ | FloatMul _ | FloatDiv _ | FloatRem _ ->
       [%craise_opt_span] None
         "Floating-point arithmetic is only supported by the Lean backend"
   | Div (_, ty) -> add_int_name ty ^ "div"
