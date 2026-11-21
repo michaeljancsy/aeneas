@@ -1,0 +1,9 @@
+[[92mInfo[39m ] Imported: tests/llbc/float32_coq_unsupported.llbc
+[[92mInfo[39m ] Copied:    tests/coq/Primitives.v
+[[91mError[39m] Float, string, non-ASCII chars and byte string literals are unsupported
+Source: 'tests/src/float32-coq-unsupported.rs', lines 6:0-8:1
+Compiler source: extract/ExtractTypes.ml, line 164
+[[91mError[39m] Float, string, non-ASCII chars and byte string literals are unsupported
+Source: 'tests/src/float32-coq-unsupported.rs', lines 6:0-8:1
+Compiler source: extract/ExtractTypes.ml, line 164
+
