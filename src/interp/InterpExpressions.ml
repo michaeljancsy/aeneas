@@ -106,7 +106,7 @@ let literal_to_tvalue (span : Meta.span) (ty : scalar_type) (cv : literal)
   (* Scalar, boolean... *)
   | TBool, VBool v -> { value = VLiteral (VBool v); ty = TScalar ty }
   | TChar, VChar v -> { value = VLiteral (VChar v); ty = TScalar ty }
-  | TFloat fty, VFloat v when v.float_ty = fty && float_type_is_supported fty ->
+  | TFloat fty, VFloat v when v.float_ty = fty ->
       (match float_of_string_opt v.float_value with
       | Some value when classify_float value = FP_nan ->
           [%craise] span "NaN literals require a bit-preserving LLBC encoding"
@@ -987,8 +987,7 @@ let eval_unary_op_symbolic (config : config) (span : Meta.span) (unop : unop)
         | Not, (TScalar TBool as lty) -> lty
         | Not, (TScalar (TInteger (Signed _)) as lty) -> lty
         | Not, (TScalar (TInteger (Unsigned _)) as lty) -> lty
-        | Neg _, (TScalar (TFloat fty) as lty) when float_type_is_supported fty
-          -> lty
+        | Neg _, (TScalar (TFloat _) as lty) -> lty
         | Neg OPanic, (TScalar (TInteger (Signed _)) as lty) -> lty
         | Neg OPanic, (TScalar (TInteger (Unsigned _)) as lty) -> lty
         | Cast (CastScalar tgt_ty), _ -> TScalar tgt_ty
@@ -1187,8 +1186,7 @@ let eval_binary_op_symbolic (config : config) (span : Meta.span) (binop : binop)
         when binop = Lt || binop = Le || binop = Ge || binop = Gt
              || binop = BitAnd || binop = BitOr || binop = BitXor ->
           TScalar TBool
-      | TScalar (TFloat fty1), TScalar (TFloat fty2)
-        when fty1 = fty2 && float_type_is_supported fty1 -> (
+      | TScalar (TFloat fty1), TScalar (TFloat fty2) when fty1 = fty2 -> (
           match binop with
           | Lt | Le | Ge | Gt -> TScalar TBool
           | Add _ | Sub _ | Mul _ | Div _ -> TScalar (TFloat fty1)

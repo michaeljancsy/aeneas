@@ -1,1 +1,4 @@
 */obj
+# Partial output of the known-failure test float64-fstar-unsupported.rs
+/Primitives.fst
+/Float64FstarUnsupported.fst

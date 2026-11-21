@@ -15,5 +15,5 @@ example : float32_traits.test_create =
 example (x y : Float32) : float32_traits.test_divide x y =
     Result.ok (float32_traits.BucketReduction.OverConsumption (Float32.div x y)) := rfl
 
-/- `Copy` for f32 resolves to the new `CopyF32` instance. -/
+/- `Copy` for f32 resolves to the `CopyF32` instance. -/
 example (x : Float32) : float32_traits.duplicate_f32 x = Result.ok (x, x) := rfl

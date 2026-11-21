@@ -1,18 +1,16 @@
 open Types
 open Utils
+include Charon.TypesUtils
 
-(** Whether the current backend can translate floating-point values of this
-    type. Only the Lean backend supports floats, mapping [f32] to [Float32] and
-    [f64] to [Float]. This is the single place that decides which float types
-    are supported; the rest of the pipeline handles any float type uniformly. *)
-let float_type_is_supported (fty : float_type) : bool =
-  Config.backend () = Config.Lean
-  &&
+(** The float types the Lean backend translates: [f32] (as [Float32]) and [f64]
+    (as [Float]). The symbolic interpreter accepts every float type; this is
+    checked when translating to the Lean backend ([translate_literal_type]) and
+    when extracting literals. [float_name] and the literal encoder then handle
+    each of these types. No other backend translates floats. *)
+let lean_supports_float_type (fty : float_type) : bool =
   match fty with
   | F32 | F64 -> true
   | F16 | F128 -> false
-
-include Charon.TypesUtils
 
 let constant_expr_as_literal (c : constant_expr) : Values.literal =
   match c.kind with

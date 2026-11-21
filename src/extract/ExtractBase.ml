@@ -537,8 +537,8 @@ let float_name (float_ty : float_type) : string =
   | Lean, F64 -> "Float"
   | Lean, F32 -> "Float32"
   | Lean, (F16 | F128) ->
-      [%craise_opt_span] None
-        "The Lean backend supports only the f32 and f64 floating-point types"
+      (* Rejected earlier, by [translate_literal_type]. *)
+      [%internal_error_opt_span] None
   | (FStar | Coq | HOL4), F16 -> "f16"
   | (FStar | Coq | HOL4), F32 -> "f32"
   | (FStar | Coq | HOL4), F64 -> "f64"

@@ -233,19 +233,22 @@ Each scalar value `s` has a `.val` field that extracts the underlying natural nu
 | `f64` | `Float`   |
 
 Float arithmetic (`+`, `-`, `*`, `/`, negation) follows IEEE 754 and never fails:
-overflow gives an infinity, and invalid operations give NaN. `==` and `!=` are IEEE
-equality, so `NaN != NaN` and `0.0 == -0.0`. Float literals are emitted as exact bit
+overflow gives an infinity, and invalid operations give NaN. Comparisons are IEEE
+comparisons: `==` and `!=` give `NaN != NaN` and `0.0 == -0.0`, and `<`, `<=`, `>`
+and `>=` are false when either side is NaN. Float literals are emitted as exact bit
 patterns, for example `Float32.ofBits 1036831949` for `0.1f32`.
+
+Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy` and
+`PartialEq` have Lean models. Other float methods, traits and constants (for
+example `max`, `floor`, `to_bits`, `PartialOrd` and `f32::EPSILON`) are extracted
+as axioms or not supported; write constants as literals.
 
 Not yet supported:
 - casts to or from float types (`as`);
 - `%` on floats;
 - NaN literals;
 - `f16` and `f128`;
-- other backends.
-
-Standard-library float constants such as `f32::EPSILON` have no Lean model and are
-extracted as axioms, so write their values as literals.
+- concrete evaluation of float code (for example with `-test-units`).
 
 ### 3.3 Collections and Containers
 
@@ -453,7 +456,8 @@ described in Section 4.
 | Returning `&'a mut T`    | Returns `Result (T × (T → ...))` with backward continuation  |
 | `&T` (shared borrow)     | `T` parameter (immutable, may be copied)                     |
 | `panic!()`               | `fail` in the `Result` monad                                 |
-| Integer overflow         | `fail` (all arithmetic is checked)                           |
+| Integer overflow         | `fail` (all integer arithmetic is checked)                   |
+| `f32` / `f64` arithmetic | `Float32` / `Float`, IEEE 754, never fails (see 3.2)         |
 | `Box<T>`                 | `T` (heap indirection erased)                                |
 | Pattern matching         | `match` in Lean                                              |
 | Recursive functions      | Lean recursive functions (may need termination proofs)       |

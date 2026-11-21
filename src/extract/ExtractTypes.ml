@@ -34,6 +34,42 @@ let extract_str (_span : Meta.span) (fmt : F.formatter) ~(inside : bool)
     - [inside]: if [true], the value should be wrapped in parentheses if it is
       made of an application (ex.: [U32 3])
     - the constant value *)
+(** The binary32 bits of a float literal, which Charon serialized as the
+    decimal string [float_value] and which was parsed to the binary64 [value].
+
+    Parsing rounds the decimal to binary64, so rounding [value] to binary32
+    rounds twice. That gives the wrong result only if [value] lands exactly on
+    a binary32 rounding boundary: a midpoint between two binary32 values, or
+    the overflow threshold. Charon's decimals identify a unique binary32 value
+    (at most 9 significant digits), so they are never near one. As a check,
+    this rejects any value within a quarter of the binary32 spacing above the
+    result of a boundary. Just below a power of two the boundary is exactly
+    that far away, so the margin there is zero, but the strict comparison still
+    rejects a value on the boundary, which is the only case that matters. It
+    also rejects any finite value that rounds to infinity. *)
+let binary32_bits_of_decimal (span : Meta.span) (float_value : string)
+    (value : float) : Z.t =
+  let bits32 = Int32.bits_of_float value in
+  let rounded = Int32.float_of_bits bits32 in
+  [%cassert] span
+    (Float.is_finite value = Float.is_finite rounded)
+    ("Binary32 literal is out of range or on the overflow rounding boundary: "
+   ^ float_value);
+  (if Float.is_finite rounded then
+     (* Spacing of binary32 values above [rounded]: 2^-149 for zero and
+        subnormals. [frexp 0.0] returns exponent 0, so zero is handled
+        separately. *)
+     let ulp =
+       if rounded = 0.0 then Float.ldexp 1.0 (-149)
+       else
+         let _, e = Float.frexp rounded in
+         Float.ldexp 1.0 (max (e - 24) (-149))
+     in
+     [%cassert] span
+       (Float.abs (value -. rounded) < ulp /. 4.0)
+       ("Binary32 literal is too close to a rounding boundary: " ^ float_value));
+  Z.of_int32 bits32
+
 let extract_literal (span : Meta.span) (fmt : F.formatter) ~(is_pattern : bool)
     ~(inside : bool) (cv : literal) : unit =
   match cv with
@@ -101,7 +137,7 @@ let extract_literal (span : Meta.span) (fmt : F.formatter) ~(is_pattern : bool)
   | VStr s -> extract_str span ~inside fmt s
   | VPureString s -> extract_pure_string fmt s
   | VFloat { float_ty; float_value }
-    when backend () = Lean && TypesUtils.float_type_is_supported float_ty ->
+    when backend () = Lean && TypesUtils.lean_supports_float_type float_ty ->
       (* Charon serializes float constants as decimal strings that identify a
          unique value of their type: round-tripping strings for f64, and at
          most 9 significant digits for f32. Emit the exact bits with [ofBits],
@@ -117,34 +153,8 @@ let extract_literal (span : Meta.span) (fmt : F.formatter) ~(is_pattern : bool)
       let bits, width =
         match float_ty with
         | F64 -> (Z.of_int64 (Int64.bits_of_float value), 64)
-        | F32 ->
-            (* [value] is the decimal rounded to binary64; rounding it again
-               to binary32 gives the wrong result only if it lands (almost)
-               exactly on a binary32 rounding boundary. A decimal identifying a
-               unique binary32 value is never near one, so reject anything
-               that comes within a quarter of the binary32 spacing of one, and
-               any finite value that overflows to infinity. *)
-            let bits32 = Int32.bits_of_float value in
-            let rounded = Int32.float_of_bits bits32 in
-            [%cassert] span
-              (Float.is_finite value = Float.is_finite rounded)
-              ("binary32 literal is out of range: " ^ float_value);
-            (if Float.is_finite rounded then
-               (* Spacing of binary32 values at [rounded]: 2^-149 for zero and
-                  subnormals. [frexp 0.0] returns exponent 0, so zero is
-                  handled separately. *)
-               let ulp =
-                 if rounded = 0.0 then Float.ldexp 1.0 (-149)
-                 else
-                   let _, e = Float.frexp rounded in
-                   Float.ldexp 1.0 (max (e - 24) (-149))
-               in
-               [%cassert] span
-                 (Float.abs (value -. rounded) < ulp /. 4.0)
-                 ("binary32 literal is too close to a rounding boundary: "
-                ^ float_value));
-            (Z.of_int32 bits32, 32)
-        | F16 | F128 -> [%craise] span "Unreachable: unsupported float type"
+        | F32 -> (binary32_bits_of_decimal span float_value value, 32)
+        | F16 | F128 -> [%internal_error] span
       in
       (* The unsigned bit pattern, for [ofBits]. *)
       let bits = Z.extract bits 0 width in
