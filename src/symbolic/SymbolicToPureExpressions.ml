@@ -690,6 +690,7 @@ and translate_function_call_aux (call : S.call) (e : S.expr) (ctx : bs_ctx) :
               | TLiteral (TFloat fty), Expressions.Sub _ -> FloatSub fty
               | TLiteral (TFloat fty), Expressions.Mul _ -> FloatMul fty
               | TLiteral (TFloat fty), Expressions.Div _ -> FloatDiv fty
+              | TLiteral (TFloat fty), Expressions.Rem _ -> FloatRem fty
               | _ -> (
                   match binop with
                   | Expressions.BitXor ->

@@ -650,6 +650,7 @@ and binop =
   | FloatSub of float_type
   | FloatMul of float_type
   | FloatDiv of float_type
+  | FloatRem of float_type
   | Add of overflow_mode * integer_type
   | Sub of overflow_mode * integer_type
   | Mul of overflow_mode * integer_type

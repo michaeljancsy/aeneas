@@ -959,6 +959,7 @@ let binop_to_string (env : fmt_env) (binop : binop) =
   | FloatSub _ -> "float_sub"
   | FloatMul _ -> "float_mul"
   | FloatDiv _ -> "float_div"
+  | FloatRem _ -> "float_rem"
   | BoolXor -> "^^"
 
 let fun_or_op_id_to_string (env : fmt_env) (fun_id : fun_or_op_id) : string =
