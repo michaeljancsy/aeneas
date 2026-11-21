@@ -409,6 +409,9 @@ let extract_cast_kind_hol4 (span : Meta.span)
          ]}
       *)
       (* Float casts are rejected for HOL4 in [SymbolicToPureExpressions]. *)
+      (match (src, tgt) with
+      | TFloat _, _ | _, TFloat _ -> [%internal_error] span
+      | _ -> ());
       if inside then F.pp_print_string fmt "(";
       F.pp_print_string fmt ("mk_" ^ scalar_name tgt);
       F.pp_print_space fmt ();

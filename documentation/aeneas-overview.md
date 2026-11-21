@@ -247,7 +247,7 @@ Casts (`as`) follow Rust and never fail. Float to integer rounds toward zero, se
 to `0`, and saturates at the integer type's bounds. Integer to float, and `f64` to `f32`,
 round to nearest (ties to even). `f32` to `f64` is exact for numbers. Between `f32` and
 `f64`, a NaN becomes Lean's standard NaN in the logical model (its sign and payload are
-not kept). The casts are defined in `Aeneas/Std/FloatCasts.lean`. Casts involving
+not kept); compiled code runs the native conversion, which may keep them. The casts are defined in `Aeneas/Std/FloatCasts.lean`. Casts involving
 128-bit integers are computed with Lean's logical float model, so evaluating them is
 slower than the others.
 

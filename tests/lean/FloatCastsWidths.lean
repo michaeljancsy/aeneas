@@ -400,7 +400,7 @@ def test_f64_to_ints : Result Unit := do
 #guard (test_f64_to_ints).reducesTo ()
 
 /-- [float_casts_widths::test_ints_to_f64]:
-    Source: 'tests/src/float-casts-widths.rs', lines 248:0-267:1
+    Source: 'tests/src/float-casts-widths.rs', lines 248:0-269:1
     Visibility: public -/
 def test_ints_to_f64 : Result Unit := do
   let fl ← u8_to_f64 200#u8
@@ -415,24 +415,26 @@ def test_ints_to_f64 : Result Unit := do
   massert (fl4 == (Float.ofBits 5182576905729208970))
   let fl5 ← usize_to_f64 40000#usize
   massert (fl5 == (Float.ofBits 4675730371722084352))
-  let fl6 ← i8_to_f64 (-100)#i8
-  massert (fl6 == (Float.ofBits 13860109328209412096))
-  let fl7 ← i16_to_f64 (-30000)#i16
-  massert (fl7 == (Float.ofBits 13897347588018929664))
-  let fl8 ← i32_to_f64 (-2000000000)#i32
-  massert (fl8 == (Float.ofBits 13969547452848537600))
-  let fl9 ← i64_to_f64 (-9000000000000000000)#i64
-  massert (fl9 == (Float.ofBits 14114063095424393472))
-  let fl10 ← i128_to_f64 (-100000000000000000000000000000000000000)#i128
-  massert (fl10 == (Float.ofBits 14398798364996444593))
-  let fl11 ← isize_to_f64 (-30000)#isize
-  massert (fl11 == (Float.ofBits 13897347588018929664))
+  let fl6 ← usize_to_f64 core.num.Usize.MAX
+  massert (fl6 > (Float.ofBits 0))
+  let fl7 ← i8_to_f64 (-100)#i8
+  massert (fl7 == (Float.ofBits 13860109328209412096))
+  let fl8 ← i16_to_f64 (-30000)#i16
+  massert (fl8 == (Float.ofBits 13897347588018929664))
+  let fl9 ← i32_to_f64 (-2000000000)#i32
+  massert (fl9 == (Float.ofBits 13969547452848537600))
+  let fl10 ← i64_to_f64 (-9000000000000000000)#i64
+  massert (fl10 == (Float.ofBits 14114063095424393472))
+  let fl11 ← i128_to_f64 (-100000000000000000000000000000000000000)#i128
+  massert (fl11 == (Float.ofBits 14398798364996444593))
+  let fl12 ← isize_to_f64 (-30000)#isize
+  massert (fl12 == (Float.ofBits 13897347588018929664))
 
 /- Unit test for [float_casts_widths::test_ints_to_f64] -/
 #guard (test_ints_to_f64).reducesTo ()
 
 /-- [float_casts_widths::test_f32_to_ints]:
-    Source: 'tests/src/float-casts-widths.rs', lines 270:0-305:1
+    Source: 'tests/src/float-casts-widths.rs', lines 272:0-307:1
     Visibility: public -/
 def test_f32_to_ints : Result Unit := do
   let i ← f32_to_u8 (Float32.ofBits 3233179238)
@@ -508,7 +510,7 @@ def test_f32_to_ints : Result Unit := do
 #guard (test_f32_to_ints).reducesTo ()
 
 /-- [float_casts_widths::test_ints_to_f32]:
-    Source: 'tests/src/float-casts-widths.rs', lines 308:0-327:1
+    Source: 'tests/src/float-casts-widths.rs', lines 310:0-330:1
     Visibility: public -/
 def test_ints_to_f32 : Result Unit := do
   let fl ← u8_to_f32 200#u8
@@ -523,24 +525,26 @@ def test_ints_to_f32 : Result Unit := do
   massert (fl4 == (Float32.ofBits 2137108966))
   let fl5 ← usize_to_f32 40000#usize
   massert (fl5 == (Float32.ofBits 1193033728))
-  let fl6 ← i8_to_f32 (-100)#i8
-  massert (fl6 == (Float32.ofBits 3267887104))
-  let fl7 ← i16_to_f32 (-30000)#i16
-  massert (fl7 == (Float32.ofBits 3337248768))
-  let fl8 ← i32_to_f32 (-2000000000)#i32
-  massert (fl8 == (Float32.ofBits 3471731496))
-  let fl9 ← i64_to_f32 (-9000000000000000000)#i64
-  massert (fl9 == (Float32.ofBits 3740912857))
-  let fl10 ← i128_to_f32 (-100000000000000000000000000000000000000)#i128
-  massert (fl10 == (Float32.ofBits 4271273625))
-  let fl11 ← isize_to_f32 (-30000)#isize
-  massert (fl11 == (Float32.ofBits 3337248768))
+  let fl6 ← usize_to_f32 core.num.Usize.MAX
+  massert (fl6 > (Float32.ofBits 0))
+  let fl7 ← i8_to_f32 (-100)#i8
+  massert (fl7 == (Float32.ofBits 3267887104))
+  let fl8 ← i16_to_f32 (-30000)#i16
+  massert (fl8 == (Float32.ofBits 3337248768))
+  let fl9 ← i32_to_f32 (-2000000000)#i32
+  massert (fl9 == (Float32.ofBits 3471731496))
+  let fl10 ← i64_to_f32 (-9000000000000000000)#i64
+  massert (fl10 == (Float32.ofBits 3740912857))
+  let fl11 ← i128_to_f32 (-100000000000000000000000000000000000000)#i128
+  massert (fl11 == (Float32.ofBits 4271273625))
+  let fl12 ← isize_to_f32 (-30000)#isize
+  massert (fl12 == (Float32.ofBits 3337248768))
 
 /- Unit test for [float_casts_widths::test_ints_to_f32] -/
 #guard (test_ints_to_f32).reducesTo ()
 
 /-- [float_casts_widths::test_casts_in_bodies]:
-    Source: 'tests/src/float-casts-widths.rs', lines 330:0-334:1
+    Source: 'tests/src/float-casts-widths.rs', lines 333:0-337:1
     Visibility: public -/
 def test_casts_in_bodies : Result Unit := do
   let i ← scaled_index (Float32.ofBits 1056964608) 10#u32

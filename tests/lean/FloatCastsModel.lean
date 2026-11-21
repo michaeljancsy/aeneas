@@ -13,8 +13,8 @@ checks the models those definitions unfold to (`FloatCasts.castToFloat32Model`,
 against the native 64-bit ones, on values that both can represent. All checks use special values
 and pseudo-random words.
 
-It is not a `module`: as a `module` importing `Aeneas.Std.FloatCasts`, `#guard` could not find a
-native implementation of the imported definitions when this was written. -/
+It is not a `module`: written as a `module`, its `#guard` failed with "Could not find native
+implementation of external declaration" for the imported casts, while the plain file runs. -/
 
 set_option autoImplicit false
 

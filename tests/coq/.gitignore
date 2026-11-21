@@ -2,4 +2,3 @@
 # float-cast-coq-unsupported.rs
 /Primitives.v
 /Float32CoqUnsupported.v
-/FloatCastCoqUnsupported.v

@@ -19,7 +19,8 @@ logical float model, so they can be reasoned about.
 
 Lean's own `Float.toFloat32` and `Float32.toFloat` are `opaque`, so `f64 <-> f32` casts are
 defined here through the logical float model, and compiled code runs Lean's native conversions
-instead (`implemented_by`), as Lean itself does for its float arithmetic. In the model a NaN gives
+instead (`implemented_by`). This is the same arrangement as Lean's own `@[extern]` float
+operations (a logical definition, with native code at run time). In the model a NaN gives
 Lean's standard positive NaN, dropping its sign and payload; native code may keep them (Rust leaves
 the NaN result of a cast unspecified).
 

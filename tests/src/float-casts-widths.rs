@@ -255,6 +255,8 @@ pub fn test_ints_to_f64() {
             == 300000000000000000000000000000000000000.0
     );
     assert!(usize_to_f64(40000) == 40000.0);
+    // A large usize (the top bit is set on 32- and 64-bit targets) catches a signed/unsigned mix-up.
+    assert!(usize_to_f64(usize::MAX) > 0.0);
     assert!(i8_to_f64(-100) == -100.0);
     assert!(i16_to_f64(-30000) == -30000.0);
     assert!(i32_to_f64(-2000000000) == -2000000000.0);
@@ -315,6 +317,7 @@ pub fn test_ints_to_f32() {
             == 300000000000000000000000000000000000000.0
     );
     assert!(usize_to_f32(40000) == 40000.0);
+    assert!(usize_to_f32(usize::MAX) > 0.0);
     assert!(i8_to_f32(-100) == -100.0);
     assert!(i16_to_f32(-30000) == -30000.0);
     assert!(i32_to_f32(-2000000000) == -2000000000.0);

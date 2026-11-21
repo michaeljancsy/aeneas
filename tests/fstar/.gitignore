@@ -3,4 +3,3 @@
 # float64-cast-fstar-unsupported.rs
 /Primitives.fst
 /Float64FstarUnsupported.fst
-/Float64CastFstarUnsupported.fst
