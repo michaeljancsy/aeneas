@@ -7,12 +7,14 @@ computed through Lean's logical float model:
 - `f64 <-> f32`, because Lean's own `Float.toFloat32` and `Float32.toFloat` are opaque;
 - 128-bit integers, which Lean has no conversions for.
 
-This file checks those model-based casts against Lean's native conversions, on special values and
-pseudo-random words:
-- `f64 <-> f32` against the opaque native conversions;
-- the 128-bit casts against the native 64-bit ones, on values that both can represent.
+Compiled code runs Lean's native conversions for `f64 <-> f32` (`implemented_by`), so this file
+checks the models those definitions unfold to (`FloatCasts.castToFloat32Model`,
+`FloatCasts.castToFloatModel`) against the native conversions. It also checks the 128-bit casts
+against the native 64-bit ones, on values that both can represent. All checks use special values
+and pseudo-random words.
 
-It is not a `module`: `#guard` must run the definitions of `Aeneas.Std` as compiled code. -/
+It is not a `module`: as a `module` importing `Aeneas.Std.FloatCasts`, `#guard` could not find a
+native implementation of the imported definitions when this was written. -/
 
 set_option autoImplicit false
 
@@ -38,11 +40,11 @@ def checkFloatFloat (w : UInt64) : Bool :=
   let x := Float.ofBits w
   let y := Float32.ofBits w.toUInt32
   let ok64 :=
-    if x.isNaN then (Float.castToFloat32 x).isNaN
-    else (Float.castToFloat32 x).toBits == x.toFloat32.toBits
+    if x.isNaN then (FloatCasts.castToFloat32Model x).isNaN
+    else (FloatCasts.castToFloat32Model x).toBits == x.toFloat32.toBits
   let ok32 :=
-    if y.isNaN then (Float32.castToFloat y).isNaN
-    else (Float32.castToFloat y).toBits == y.toFloat.toBits
+    if y.isNaN then (FloatCasts.castToFloatModel y).isNaN
+    else (FloatCasts.castToFloatModel y).toBits == y.toFloat.toBits
   ok64 && ok32
 
 /-- `f64`/`f32 -> u128`/`i128` (model) against the native 64-bit conversions, on values whose

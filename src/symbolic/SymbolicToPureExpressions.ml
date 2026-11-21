@@ -596,6 +596,13 @@ and translate_function_call_aux (call : S.call) (e : S.expr) (ctx : bs_ctx) :
               in
               let src_ty = translate_literal_type src_ty in
               let tgt_ty = translate_literal_type tgt_ty in
+              (* Only the Lean backend translates floats. *)
+              (match (src_ty, tgt_ty) with
+              | (TFloat _, _ | _, TFloat _) when Config.backend () <> Lean ->
+                  [%craise] ctx.span
+                    "Floating-point casts are only supported by the Lean \
+                     backend"
+              | _ -> ());
               (* Casts never fail in the Lean backend: float casts round or
                  saturate, as in Rust. *)
               (CastLit (src_ty, tgt_ty), not (Config.backend () = Lean))
