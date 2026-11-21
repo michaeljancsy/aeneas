@@ -83,6 +83,17 @@ pub fn test_rem32() {
     assert!(r != r);
     let r = rem32(nan, 1.0);
     assert!(r != r);
+    assert!(div32(1.0, rem32(-0.0, 1.0)) == -inf);
+    assert!(div32(1.0, rem32(-0.0, inf)) == -inf);
+    assert!(rem32(3.40282347e38, 1e-45) == 0.0);
+    let r = rem32(inf, inf);
+    assert!(r != r);
+    let r = rem32(-inf, inf);
+    assert!(r != r);
+    let r = rem32(0.0, -0.0);
+    assert!(r != r);
+    let r = rem32(2.0, nan);
+    assert!(r != r);
 }
 
 #[cfg(test)]

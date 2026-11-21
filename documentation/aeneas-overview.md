@@ -247,15 +247,16 @@ Casts (`as`) follow Rust and never fail. Float to integer rounds toward zero, se
 to `0`, and saturates at the integer type's bounds. Integer to float, and `f64` to `f32`,
 round to nearest (ties to even). `f32` to `f64` is exact for numbers. Between `f32` and
 `f64`, a NaN becomes Lean's standard NaN in the logical model (its sign and payload are
-not kept); compiled code runs the native conversion, which may keep them. The casts are defined in `Aeneas/Std/FloatCasts.lean`. Casts involving
-128-bit integers are computed with Lean's logical float model, so evaluating them is
-slower than the others.
+not kept); compiled code runs the native conversion, which may keep them. The casts are
+defined in `Aeneas/Std/FloatCasts.lean`. Casts involving 128-bit integers are computed
+with Lean's logical float model, so evaluating them is slower than the others.
 
 The remainder `%` follows Rust, which is C's `fmod`: `x % y` is `x - trunc(x / y) * y`
 computed exactly (the result is always representable), with the sign of `x`, also when
 it is zero. It is NaN if `x` is infinite, `y` is zero, or either is NaN, and it is `x`
 if `y` is infinite and `x` is finite. It never fails. It is translated to `Float.rem`
-and `Float32.rem`, defined through Lean's logical float model.
+and `Float32.rem` (in `Aeneas/Std/FloatRem.lean`), defined through Lean's logical
+float model; Lean has no native `fmod`, so compiled code also runs that definition.
 
 Not yet supported:
 - NaN literals;

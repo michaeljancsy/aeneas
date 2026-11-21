@@ -136,7 +136,7 @@ def test_rem64 : Result Unit := do
 #guard (test_rem64).reducesTo ()
 
 /-- [float_rem::test_rem32]:
-    Source: 'tests/src/float-rem.rs', lines 66:0-86:1
+    Source: 'tests/src/float-rem.rs', lines 66:0-97:1
     Visibility: public -/
 def test_rem32 : Result Unit := do
   let inf ← div32 (Float32.ofBits 1065353216) (Float32.ofBits 0)
@@ -171,6 +171,22 @@ def test_rem32 : Result Unit := do
   massert (r1 != r1)
   let r2 ← rem32 nan (Float32.ofBits 1065353216)
   massert (r2 != r2)
+  let fl13 ← rem32 (Float32.ofBits 2147483648) (Float32.ofBits 1065353216)
+  let fl14 ← div32 (Float32.ofBits 1065353216) fl13
+  massert (fl14 == (Float32.neg inf))
+  let fl15 ← rem32 (Float32.ofBits 2147483648) inf
+  let fl16 ← div32 (Float32.ofBits 1065353216) fl15
+  massert (fl16 == (Float32.neg inf))
+  let fl17 ← rem32 (Float32.ofBits 2139095039) (Float32.ofBits 1)
+  massert (fl17 == (Float32.ofBits 0))
+  let r3 ← rem32 inf inf
+  massert (r3 != r3)
+  let r4 ← rem32 (Float32.neg inf) inf
+  massert (r4 != r4)
+  let r5 ← rem32 (Float32.ofBits 0) (Float32.ofBits 2147483648)
+  massert (r5 != r5)
+  let r6 ← rem32 (Float32.ofBits 1073741824) nan
+  massert (r6 != r6)
 
 /- Unit test for [float_rem::test_rem32] -/
 #guard (test_rem32).reducesTo ()
