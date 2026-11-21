@@ -103,66 +103,104 @@ def ops64 (x : Float) (y : Float) : Result Std.U32 := do
 def ops32 (x : Float32) (y : Float32) : Result Std.U32 := do
   ops_generic core.cmp.PartialOrdF32 x y
 
+/-- [float_ordering::ops64_direct]:
+    Source: 'tests/src/float-ordering.rs', lines 60:0-62:1
+    Visibility: public -/
+def ops64_direct (x : Float) (y : Float) : Result Std.U32 := do
+  let b ← lift (core.cmp.impls.PartialOrdF64.lt x y)
+  let i ← lift (UScalar.cast_fromBool .U32 b)
+  let b1 ← lift (core.cmp.impls.PartialOrdF64.le x y)
+  let i1 ← lift (UScalar.cast_fromBool .U32 b1)
+  let i2 ← 2#u32 * i1
+  let i3 ← i + i2
+  let b2 ← lift (core.cmp.impls.PartialOrdF64.gt x y)
+  let i4 ← lift (UScalar.cast_fromBool .U32 b2)
+  let i5 ← 4#u32 * i4
+  let i6 ← i3 + i5
+  let b3 ← lift (core.cmp.impls.PartialOrdF64.ge x y)
+  let i7 ← lift (UScalar.cast_fromBool .U32 b3)
+  let i8 ← 8#u32 * i7
+  i6 + i8
+
+/-- [float_ordering::ops32_direct]:
+    Source: 'tests/src/float-ordering.rs', lines 63:0-65:1
+    Visibility: public -/
+def ops32_direct (x : Float32) (y : Float32) : Result Std.U32 := do
+  let b ← lift (core.cmp.impls.PartialOrdF32.lt x y)
+  let i ← lift (UScalar.cast_fromBool .U32 b)
+  let b1 ← lift (core.cmp.impls.PartialOrdF32.le x y)
+  let i1 ← lift (UScalar.cast_fromBool .U32 b1)
+  let i2 ← 2#u32 * i1
+  let i3 ← i + i2
+  let b2 ← lift (core.cmp.impls.PartialOrdF32.gt x y)
+  let i4 ← lift (UScalar.cast_fromBool .U32 b2)
+  let i5 ← 4#u32 * i4
+  let i6 ← i3 + i5
+  let b3 ← lift (core.cmp.impls.PartialOrdF32.ge x y)
+  let i7 ← lift (UScalar.cast_fromBool .U32 b3)
+  let i8 ← 8#u32 * i7
+  i6 + i8
+
 /-- [float_ordering::default64]:
-    Source: 'tests/src/float-ordering.rs', lines 59:0-61:1
+    Source: 'tests/src/float-ordering.rs', lines 66:0-68:1
     Visibility: public -/
 def default64 : Result Float := do
   core.default.DefaultF64.default
 
 /-- [float_ordering::default32]:
-    Source: 'tests/src/float-ordering.rs', lines 62:0-64:1
+    Source: 'tests/src/float-ordering.rs', lines 69:0-71:1
     Visibility: public -/
 def default32 : Result Float32 := do
   core.default.DefaultF32.default
 
 /-- [float_ordering::div64]:
-    Source: 'tests/src/float-ordering.rs', lines 66:0-68:1
+    Source: 'tests/src/float-ordering.rs', lines 73:0-75:1
     Visibility: public -/
 def div64 (x : Float) (y : Float) : Result Float := do
   ok (Float.div x y)
 
 /-- [float_ordering::div32]:
-    Source: 'tests/src/float-ordering.rs', lines 69:0-71:1
+    Source: 'tests/src/float-ordering.rs', lines 76:0-78:1
     Visibility: public -/
 def div32 (x : Float32) (y : Float32) : Result Float32 := do
   ok (Float32.div x y)
 
 /-- [float_ordering::Sample]
-    Source: 'tests/src/float-ordering.rs', lines 75:0-78:1
+    Source: 'tests/src/float-ordering.rs', lines 82:0-85:1
     Visibility: public -/
 structure Sample where
   time : Float
   level : Float32
 
 /-- [float_ordering::{impl core::clone::Clone for float_ordering::Sample}::clone]:
-    Source: 'tests/src/float-ordering.rs', lines 74:9-74:14
+    Source: 'tests/src/float-ordering.rs', lines 81:9-81:14
     Visibility: public -/
 def Sample.Insts.CoreCloneClone.clone (self : Sample) : Result Sample := do
   ok self
 
 /-- Trait implementation: [float_ordering::{impl core::clone::Clone for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:9-74:14 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:9-81:14 -/
 @[reducible]
 def Sample.Insts.CoreCloneClone : core.clone.Clone Sample := {
   clone := Sample.Insts.CoreCloneClone.clone
 }
 
 /-- Trait implementation: [float_ordering::{impl core::marker::Copy for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:16-74:20 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:16-81:20 -/
 @[reducible]
 def Sample.Insts.CoreMarkerCopy : core.marker.Copy Sample := {
   cloneInst := Sample.Insts.CoreCloneClone
 }
 
 /-- Trait implementation: [float_ordering::{impl core::marker::StructuralPartialEq for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:22-74:31 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31 -/
 @[reducible]
 def Sample.Insts.CoreMarkerStructuralPartialEq :
   core.marker.StructuralPartialEq Sample := {
 }
 
 /-- [float_ordering::{impl core::cmp::PartialEq<float_ordering::Sample> for float_ordering::Sample}::eq]:
-    Source: 'tests/src/float-ordering.rs', lines 74:22-74:31
+    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31
     Visibility: public -/
 def Sample.Insts.CoreCmpPartialEqSample.eq
   (self : Sample) (other : Sample) : Result Bool := do
@@ -171,14 +209,14 @@ def Sample.Insts.CoreCmpPartialEqSample.eq
   else ok false
 
 /-- Trait implementation: [float_ordering::{impl core::cmp::PartialEq<float_ordering::Sample> for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:22-74:31 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31 -/
 @[reducible]
 def Sample.Insts.CoreCmpPartialEqSample : core.cmp.PartialEq Sample Sample := {
   eq := Sample.Insts.CoreCmpPartialEqSample.eq
 }
 
 /-- [float_ordering::{impl core::cmp::PartialOrd<float_ordering::Sample> for float_ordering::Sample}::partial_cmp]:
-    Source: 'tests/src/float-ordering.rs', lines 74:33-74:43
+    Source: 'tests/src/float-ordering.rs', lines 81:33-81:43
     Visibility: public -/
 def Sample.Insts.CoreCmpPartialOrdSample.partial_cmp
   (self : Sample) (other : Sample) : Result (Option Ordering) := do
@@ -194,7 +232,7 @@ def Sample.Insts.CoreCmpPartialOrdSample.partial_cmp
     | Ordering.gt => ok o
 
 /-- Trait implementation: [float_ordering::{impl core::cmp::PartialOrd<float_ordering::Sample> for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:33-74:43 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:33-81:43 -/
 @[reducible]
 impl_def Sample.Insts.CoreCmpPartialOrdSample : core.cmp.PartialOrd Sample
   Sample := {
@@ -211,7 +249,7 @@ impl_def Sample.Insts.CoreCmpPartialOrdSample : core.cmp.PartialOrd Sample
 }
 
 /-- [float_ordering::{impl core::default::Default for float_ordering::Sample}::default]:
-    Source: 'tests/src/float-ordering.rs', lines 74:45-74:52
+    Source: 'tests/src/float-ordering.rs', lines 81:45-81:52
     Visibility: public -/
 def Sample.Insts.CoreDefaultDefault.default : Result Sample := do
   let fl ← core.default.DefaultF64.default
@@ -219,14 +257,14 @@ def Sample.Insts.CoreDefaultDefault.default : Result Sample := do
   ok { time := fl, level := fl1 }
 
 /-- Trait implementation: [float_ordering::{impl core::default::Default for float_ordering::Sample}]
-    Source: 'tests/src/float-ordering.rs', lines 74:45-74:52 -/
+    Source: 'tests/src/float-ordering.rs', lines 81:45-81:52 -/
 @[reducible]
 def Sample.Insts.CoreDefaultDefault : core.default.Default Sample := {
   default := Sample.Insts.CoreDefaultDefault.default
 }
 
 /-- [float_ordering::Gain]
-    Source: 'tests/src/float-ordering.rs', lines 82:0-87:1
+    Source: 'tests/src/float-ordering.rs', lines 89:0-94:1
     Visibility: public -/
 @[discriminant isize]
 inductive Gain where
@@ -235,34 +273,34 @@ inductive Gain where
 | Decibels : Float → Float32 → Gain
 
 /-- [float_ordering::{impl core::clone::Clone for float_ordering::Gain}::clone]:
-    Source: 'tests/src/float-ordering.rs', lines 81:9-81:14
+    Source: 'tests/src/float-ordering.rs', lines 88:9-88:14
     Visibility: public -/
 def Gain.Insts.CoreCloneClone.clone (self : Gain) : Result Gain := do
   ok self
 
 /-- Trait implementation: [float_ordering::{impl core::clone::Clone for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:9-81:14 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:9-88:14 -/
 @[reducible]
 def Gain.Insts.CoreCloneClone : core.clone.Clone Gain := {
   clone := Gain.Insts.CoreCloneClone.clone
 }
 
 /-- Trait implementation: [float_ordering::{impl core::marker::Copy for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:16-81:20 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:16-88:20 -/
 @[reducible]
 def Gain.Insts.CoreMarkerCopy : core.marker.Copy Gain := {
   cloneInst := Gain.Insts.CoreCloneClone
 }
 
 /-- Trait implementation: [float_ordering::{impl core::marker::StructuralPartialEq for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:22-88:31 -/
 @[reducible]
 def Gain.Insts.CoreMarkerStructuralPartialEq : core.marker.StructuralPartialEq
   Gain := {
 }
 
 /-- [float_ordering::{impl core::cmp::PartialEq<float_ordering::Gain> for float_ordering::Gain}::eq]:
-    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31
+    Source: 'tests/src/float-ordering.rs', lines 88:22-88:31
     Visibility: public -/
 def Gain.Insts.CoreCmpPartialEqGain.eq
   (self : Gain) (other : Gain) : Result Bool := do
@@ -290,14 +328,14 @@ def Gain.Insts.CoreCmpPartialEqGain.eq
   else ok false
 
 /-- Trait implementation: [float_ordering::{impl core::cmp::PartialEq<float_ordering::Gain> for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:22-81:31 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:22-88:31 -/
 @[reducible]
 def Gain.Insts.CoreCmpPartialEqGain : core.cmp.PartialEq Gain Gain := {
   eq := Gain.Insts.CoreCmpPartialEqGain.eq
 }
 
 /-- [float_ordering::{impl core::cmp::PartialOrd<float_ordering::Gain> for float_ordering::Gain}::partial_cmp]:
-    Source: 'tests/src/float-ordering.rs', lines 81:33-81:43
+    Source: 'tests/src/float-ordering.rs', lines 88:33-88:43
     Visibility: public -/
 def Gain.Insts.CoreCmpPartialOrdGain.partial_cmp
   (self : Gain) (other : Gain) : Result (Option Ordering) := do
@@ -330,7 +368,7 @@ def Gain.Insts.CoreCmpPartialOrdGain.partial_cmp
         | Ordering.gt => ok o
 
 /-- Trait implementation: [float_ordering::{impl core::cmp::PartialOrd<float_ordering::Gain> for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:33-81:43 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:33-88:43 -/
 @[reducible]
 impl_def Gain.Insts.CoreCmpPartialOrdGain : core.cmp.PartialOrd Gain Gain := {
   partialEqInst := Gain.Insts.CoreCmpPartialEqGain
@@ -342,46 +380,46 @@ impl_def Gain.Insts.CoreCmpPartialOrdGain : core.cmp.PartialOrd Gain Gain := {
 }
 
 /-- [float_ordering::{impl core::default::Default for float_ordering::Gain}::default]:
-    Source: 'tests/src/float-ordering.rs', lines 81:45-81:52
+    Source: 'tests/src/float-ordering.rs', lines 88:45-88:52
     Visibility: public -/
 def Gain.Insts.CoreDefaultDefault.default : Result Gain := do
   ok Gain.Off
 
 /-- Trait implementation: [float_ordering::{impl core::default::Default for float_ordering::Gain}]
-    Source: 'tests/src/float-ordering.rs', lines 81:45-81:52 -/
+    Source: 'tests/src/float-ordering.rs', lines 88:45-88:52 -/
 @[reducible]
 def Gain.Insts.CoreDefaultDefault : core.default.Default Gain := {
   default := Gain.Insts.CoreDefaultDefault.default
 }
 
 /-- [float_ordering::cmp_sample]:
-    Source: 'tests/src/float-ordering.rs', lines 89:0-91:1
+    Source: 'tests/src/float-ordering.rs', lines 96:0-98:1
     Visibility: public -/
 def cmp_sample (x : Sample) (y : Sample) : Result Std.I32 := do
   let o ← Sample.Insts.CoreCmpPartialOrdSample.partial_cmp x y
   code o
 
 /-- [float_ordering::lt_sample]:
-    Source: 'tests/src/float-ordering.rs', lines 92:0-94:1
+    Source: 'tests/src/float-ordering.rs', lines 99:0-101:1
     Visibility: public -/
 def lt_sample (x : Sample) (y : Sample) : Result Bool := do
   core.cmp.impls.PartialOrdShared.lt Sample.Insts.CoreCmpPartialOrdSample x y
 
 /-- [float_ordering::cmp_gain]:
-    Source: 'tests/src/float-ordering.rs', lines 95:0-97:1
+    Source: 'tests/src/float-ordering.rs', lines 102:0-104:1
     Visibility: public -/
 def cmp_gain (x : Gain) (y : Gain) : Result Std.I32 := do
   let o ← Gain.Insts.CoreCmpPartialOrdGain.partial_cmp x y
   code o
 
 /-- [float_ordering::le_gain]:
-    Source: 'tests/src/float-ordering.rs', lines 98:0-100:1
+    Source: 'tests/src/float-ordering.rs', lines 105:0-107:1
     Visibility: public -/
 def le_gain (x : Gain) (y : Gain) : Result Bool := do
   core.cmp.impls.PartialOrdShared.le Gain.Insts.CoreCmpPartialOrdGain x y
 
 /-- [float_ordering::test_partial_cmp64]:
-    Source: 'tests/src/float-ordering.rs', lines 103:0-125:1
+    Source: 'tests/src/float-ordering.rs', lines 110:0-132:1
     Visibility: public -/
 def test_partial_cmp64 : Result Unit := do
   let nan ← div64 (Float.ofBits 0) (Float.ofBits 0)
@@ -437,7 +475,7 @@ def test_partial_cmp64 : Result Unit := do
 #guard (test_partial_cmp64).reducesTo ()
 
 /-- [float_ordering::test_partial_cmp32]:
-    Source: 'tests/src/float-ordering.rs', lines 128:0-146:1
+    Source: 'tests/src/float-ordering.rs', lines 135:0-155:1
     Visibility: public -/
 def test_partial_cmp32 : Result Unit := do
   let nan ← div32 (Float32.ofBits 0) (Float32.ofBits 0)
@@ -467,18 +505,22 @@ def test_partial_cmp32 : Result Unit := do
   massert (i10 = 1#i32)
   let i11 ← cmp32 (Float32.ofBits 1) (Float32.ofBits 0)
   massert (i11 = 1#i32)
-  let i12 ← cmp_generic core.cmp.PartialOrdF32 nan nan
-  massert (i12 = 2#i32)
-  let i13 ←
+  let i12 ← cmp32 (Float32.ofBits 2147483649) (Float32.ofBits 2147483648)
+  massert (i12 = (-1)#i32)
+  let i13 ← cmp32 ninf (Float32.ofBits 4286578687)
+  massert (i13 = (-1)#i32)
+  let i14 ← cmp_generic core.cmp.PartialOrdF32 nan nan
+  massert (i14 = 2#i32)
+  let i15 ←
     cmp_generic core.cmp.PartialOrdF32 (Float32.ofBits 0)
       (Float32.ofBits 2147483648)
-  massert (i13 = 0#i32)
+  massert (i15 = 0#i32)
 
 /- Unit test for [float_ordering::test_partial_cmp32] -/
 #guard (test_partial_cmp32).reducesTo ()
 
 /-- [float_ordering::test_ops]:
-    Source: 'tests/src/float-ordering.rs', lines 149:0-166:1
+    Source: 'tests/src/float-ordering.rs', lines 158:0-184:1
     Visibility: public -/
 def test_ops : Result Unit := do
   let nan64 ← div64 (Float.ofBits 0) (Float.ofBits 0)
@@ -512,12 +554,36 @@ def test_ops : Result Unit := do
   massert (i11 = 0#u32)
   let i12 ← ops32 nan32 nan32
   massert (i12 = 0#u32)
+  let i13 ← ops32 (Float32.ofBits 1065353216) nan32
+  massert (i13 = 0#u32)
+  let i14 ←
+    ops64_direct (Float.ofBits 4607182418800017408)
+      (Float.ofBits 4611686018427387904)
+  massert (i14 = 3#u32)
+  let i15 ← ops64_direct (Float.ofBits 9223372036854775808) (Float.ofBits 0)
+  massert (i15 = 10#u32)
+  let i16 ←
+    ops64_direct (Float.ofBits 4613937818241073152)
+      (Float.ofBits 4611686018427387904)
+  massert (i16 = 12#u32)
+  let i17 ← ops64_direct nan64 (Float.ofBits 4607182418800017408)
+  massert (i17 = 0#u32)
+  let i18 ←
+    ops32_direct (Float32.ofBits 1065353216) (Float32.ofBits 1073741824)
+  massert (i18 = 3#u32)
+  let i19 ← ops32_direct (Float32.ofBits 0) (Float32.ofBits 2147483648)
+  massert (i19 = 10#u32)
+  let i20 ←
+    ops32_direct (Float32.ofBits 1077936128) (Float32.ofBits 1073741824)
+  massert (i20 = 12#u32)
+  let i21 ← ops32_direct (Float32.ofBits 1065353216) nan32
+  massert (i21 = 0#u32)
 
 /- Unit test for [float_ordering::test_ops] -/
 #guard (test_ops).reducesTo ()
 
 /-- [float_ordering::test_default]:
-    Source: 'tests/src/float-ordering.rs', lines 169:0-180:1
+    Source: 'tests/src/float-ordering.rs', lines 187:0-198:1
     Visibility: public -/
 def test_default : Result Unit := do
   let z64 ← default64
@@ -537,7 +603,7 @@ def test_default : Result Unit := do
 #guard (test_default).reducesTo ()
 
 /-- [float_ordering::test_derived]:
-    Source: 'tests/src/float-ordering.rs', lines 183:0-244:1
+    Source: 'tests/src/float-ordering.rs', lines 201:0-263:1
     Visibility: public -/
 def test_derived : Result Unit := do
   let nan64 ← div64 (Float.ofBits 0) (Float.ofBits 0)
@@ -668,8 +734,10 @@ def test_derived : Result Unit := do
   let b5 ← le_gain (Gain.Linear nan32) (Gain.Linear nan32)
   massert (¬ b5)
   let s ← default_generic Sample.Insts.CoreDefaultDefault
-  massert (s.time == (Float.ofBits 0))
-  massert (s.level == (Float32.ofBits 0))
+  let fl ← div64 (Float.ofBits 4607182418800017408) (Float.ofBits 0)
+  massert ((Float.div (Float.ofBits 4607182418800017408) s.time) == fl)
+  let fl1 ← div32 (Float32.ofBits 1065353216) (Float32.ofBits 0)
+  massert ((Float32.div (Float32.ofBits 1065353216) s.level) == fl1)
   let g ← default_generic Gain.Insts.CoreDefaultDefault
   let i14 ← cmp_gain g Gain.Off
   massert (i14 = 0#i32)

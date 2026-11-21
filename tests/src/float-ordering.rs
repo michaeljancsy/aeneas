@@ -56,6 +56,13 @@ pub fn ops64(x: f64, y: f64) -> u32 {
 pub fn ops32(x: f32, y: f32) -> u32 {
     ops_generic(&x, &y)
 }
+/// Direct method calls on a concrete type, packed like `ops_generic`.
+pub fn ops64_direct(x: f64, y: f64) -> u32 {
+    (x.lt(&y) as u32) + 2 * (x.le(&y) as u32) + 4 * (x.gt(&y) as u32) + 8 * (x.ge(&y) as u32)
+}
+pub fn ops32_direct(x: f32, y: f32) -> u32 {
+    (x.lt(&y) as u32) + 2 * (x.le(&y) as u32) + 4 * (x.gt(&y) as u32) + 8 * (x.ge(&y) as u32)
+}
 pub fn default64() -> f64 {
     f64::default()
 }
@@ -141,6 +148,8 @@ pub fn test_partial_cmp32() {
     assert!(cmp32(inf, 3.0e38) == 1);
     assert!(cmp32(-1.5, -2.5) == 1);
     assert!(cmp32(1.0e-45, 0.0) == 1);
+    assert!(cmp32(-1.0e-45, -0.0) == -1);
+    assert!(cmp32(ninf, -3.4028235e38) == -1);
     assert!(cmp_generic(&nan, &nan) == 2);
     assert!(cmp_generic(&0.0f32, &-0.0) == 0);
 }
@@ -163,6 +172,15 @@ pub fn test_ops() {
     assert!(ops32(0.0, -0.0) == 10);
     assert!(ops32(nan32, 1.0) == 0);
     assert!(ops32(nan32, nan32) == 0);
+    assert!(ops32(1.0, nan32) == 0);
+    assert!(ops64_direct(1.0, 2.0) == 3);
+    assert!(ops64_direct(-0.0, 0.0) == 10);
+    assert!(ops64_direct(3.0, 2.0) == 12);
+    assert!(ops64_direct(nan64, 1.0) == 0);
+    assert!(ops32_direct(1.0, 2.0) == 3);
+    assert!(ops32_direct(0.0, -0.0) == 10);
+    assert!(ops32_direct(3.0, 2.0) == 12);
+    assert!(ops32_direct(1.0, nan32) == 0);
 }
 
 #[verify::test]
@@ -239,7 +257,8 @@ pub fn test_derived() {
     assert!(!le_gain(&Gain::Linear(nan32), &Gain::Linear(nan32)));
     // Derived `Default`.
     let s: Sample = default_generic();
-    assert!(s.time == 0.0 && s.level == 0.0);
+    // +0.0, not -0.0, in both fields.
+    assert!(1.0 / s.time == div64(1.0, 0.0) && 1.0 / s.level == div32(1.0, 0.0));
     assert!(cmp_gain(&default_generic(), &off) == 0);
 }
 

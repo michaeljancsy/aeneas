@@ -13,12 +13,13 @@ Rust's `PartialOrd` for floats follows IEEE 754:
 
 Every definition goes through Lean's logical float model (`Float.toModel`, `Float32.toModel`), so
 it can be reasoned about. The lemmas below relate the model to Lean's native comparisons
-(`<`, `≤`, `==`), which are defined through the same model.
+(`<` and `≤`), which are defined through the same model.
 
 `Default` is `+0.0`.
 
 Note that `x < y` on floats in Rust source is a built-in binary operation, not a trait call: these
-definitions are used by generic code and by `#[derive(PartialOrd, Default)]`.
+definitions are used by method calls such as `x.partial_cmp(&y)` or `x.lt(&y)`, by generic code
+and by `#[derive(PartialOrd, Default)]`.
 -/
 namespace Aeneas.Std
 
@@ -92,41 +93,41 @@ def core.default.DefaultF32 : core.default.Default Float32 where
 
 /-! ## Relation to Lean's native comparisons -/
 
-theorem core.cmp.impls.PartialOrdF64.lt_eq (x y : Float) :
+@[simp] theorem core.cmp.impls.PartialOrdF64.lt_eq (x y : Float) :
     core.cmp.impls.PartialOrdF64.lt x y = decide (x < y) := by
   simp [core.cmp.impls.PartialOrdF64.lt, LT.lt, Float.lt]
 
-theorem core.cmp.impls.PartialOrdF64.le_eq (x y : Float) :
+@[simp] theorem core.cmp.impls.PartialOrdF64.le_eq (x y : Float) :
     core.cmp.impls.PartialOrdF64.le x y = decide (x ≤ y) := by
   simp [core.cmp.impls.PartialOrdF64.le, LE.le, Float.le]
 
-theorem core.cmp.impls.PartialOrdF64.gt_eq (x y : Float) :
+@[simp] theorem core.cmp.impls.PartialOrdF64.gt_eq (x y : Float) :
     core.cmp.impls.PartialOrdF64.gt x y = decide (y < x) :=
   core.cmp.impls.PartialOrdF64.lt_eq y x
 
-theorem core.cmp.impls.PartialOrdF64.ge_eq (x y : Float) :
+@[simp] theorem core.cmp.impls.PartialOrdF64.ge_eq (x y : Float) :
     core.cmp.impls.PartialOrdF64.ge x y = decide (y ≤ x) :=
   core.cmp.impls.PartialOrdF64.le_eq y x
 
-theorem core.cmp.impls.PartialOrdF32.lt_eq (x y : Float32) :
+@[simp] theorem core.cmp.impls.PartialOrdF32.lt_eq (x y : Float32) :
     core.cmp.impls.PartialOrdF32.lt x y = decide (x < y) := by
   simp [core.cmp.impls.PartialOrdF32.lt, LT.lt, Float32.lt]
 
-theorem core.cmp.impls.PartialOrdF32.le_eq (x y : Float32) :
+@[simp] theorem core.cmp.impls.PartialOrdF32.le_eq (x y : Float32) :
     core.cmp.impls.PartialOrdF32.le x y = decide (x ≤ y) := by
   simp [core.cmp.impls.PartialOrdF32.le, LE.le, Float32.le]
 
-theorem core.cmp.impls.PartialOrdF32.gt_eq (x y : Float32) :
+@[simp] theorem core.cmp.impls.PartialOrdF32.gt_eq (x y : Float32) :
     core.cmp.impls.PartialOrdF32.gt x y = decide (y < x) :=
   core.cmp.impls.PartialOrdF32.lt_eq y x
 
-theorem core.cmp.impls.PartialOrdF32.ge_eq (x y : Float32) :
+@[simp] theorem core.cmp.impls.PartialOrdF32.ge_eq (x y : Float32) :
     core.cmp.impls.PartialOrdF32.ge x y = decide (y ≤ x) :=
   core.cmp.impls.PartialOrdF32.le_eq y x
 
-/-! ### `F64`: the comparison methods agree with `partial_cmp` -/
+/-! ### `partial_cmp` is `none` exactly on NaN -/
 
-theorem core.cmp.impls.PartialOrdF64.partial_cmp_eq_none_iff (x y : Float) :
+@[simp] theorem core.cmp.impls.PartialOrdF64.partial_cmp_eq_none_iff (x y : Float) :
     core.cmp.impls.PartialOrdF64.partial_cmp x y = none ↔ x.isNaN ∨ y.isNaN := by
   simp only [core.cmp.impls.PartialOrdF64.partial_cmp, Float.isNaN, Float.Model.compare,
     Float.Model.isNaN]
@@ -136,25 +137,7 @@ theorem core.cmp.impls.PartialOrdF64.partial_cmp_eq_none_iff (x y : Float) :
     simp [Float.Model.UnpackedFloat.compare, Float.Model.UnpackedFloat.isNaN] <;>
     split <;> simp_all
 
-theorem core.cmp.impls.PartialOrdF64.lt_eq_partial_cmp (x y : Float) :
-    core.cmp.impls.PartialOrdF64.lt x y =
-      (core.cmp.impls.PartialOrdF64.partial_cmp x y == some .lt) := rfl
-
-theorem core.cmp.impls.PartialOrdF64.gt_eq_partial_cmp (x y : Float) :
-    core.cmp.impls.PartialOrdF64.gt x y =
-      (core.cmp.impls.PartialOrdF64.partial_cmp y x == some .lt) := rfl
-
-theorem core.cmp.impls.PartialOrdF64.le_eq_partial_cmp (x y : Float) :
-    core.cmp.impls.PartialOrdF64.le x y =
-      (core.cmp.impls.PartialOrdF64.partial_cmp x y).any (·.isLE) := rfl
-
-theorem core.cmp.impls.PartialOrdF64.ge_eq_partial_cmp (x y : Float) :
-    core.cmp.impls.PartialOrdF64.ge x y =
-      (core.cmp.impls.PartialOrdF64.partial_cmp y x).any (·.isLE) := rfl
-
-/-! ### `F32`: the comparison methods agree with `partial_cmp` -/
-
-theorem core.cmp.impls.PartialOrdF32.partial_cmp_eq_none_iff (x y : Float32) :
+@[simp] theorem core.cmp.impls.PartialOrdF32.partial_cmp_eq_none_iff (x y : Float32) :
     core.cmp.impls.PartialOrdF32.partial_cmp x y = none ↔ x.isNaN ∨ y.isNaN := by
   simp only [core.cmp.impls.PartialOrdF32.partial_cmp, Float32.isNaN, Float32.Model.compare,
     Float32.Model.isNaN]
@@ -163,21 +146,5 @@ theorem core.cmp.impls.PartialOrdF32.partial_cmp_eq_none_iff (x y : Float32) :
   cases a <;> cases b <;>
     simp [Float.Model.UnpackedFloat.compare, Float.Model.UnpackedFloat.isNaN] <;>
     split <;> simp_all
-
-theorem core.cmp.impls.PartialOrdF32.lt_eq_partial_cmp (x y : Float32) :
-    core.cmp.impls.PartialOrdF32.lt x y =
-      (core.cmp.impls.PartialOrdF32.partial_cmp x y == some .lt) := rfl
-
-theorem core.cmp.impls.PartialOrdF32.gt_eq_partial_cmp (x y : Float32) :
-    core.cmp.impls.PartialOrdF32.gt x y =
-      (core.cmp.impls.PartialOrdF32.partial_cmp y x == some .lt) := rfl
-
-theorem core.cmp.impls.PartialOrdF32.le_eq_partial_cmp (x y : Float32) :
-    core.cmp.impls.PartialOrdF32.le x y =
-      (core.cmp.impls.PartialOrdF32.partial_cmp x y).any (·.isLE) := rfl
-
-theorem core.cmp.impls.PartialOrdF32.ge_eq_partial_cmp (x y : Float32) :
-    core.cmp.impls.PartialOrdF32.ge x y =
-      (core.cmp.impls.PartialOrdF32.partial_cmp y x).any (·.isLE) := rfl
 
 end Aeneas.Std

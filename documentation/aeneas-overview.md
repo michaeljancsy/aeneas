@@ -243,8 +243,8 @@ Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy`,
 and constants (for example `max`, `floor`, `to_bits` and `f32::EPSILON`) are extracted
 as axioms or not supported; write constants as literals.
 
-`PartialOrd` (in `Aeneas/Std/FloatOrd.lean`) is used by generic code and by
-`#[derive(PartialOrd)]`: `partial_cmp` is `none` when either side is NaN and treats
+`PartialOrd` (in `Aeneas/Std/FloatOrd.lean`) is used by method calls such as
+`x.partial_cmp(&y)`, by generic code and by `#[derive(PartialOrd)]`: `partial_cmp` is `none` when either side is NaN and treats
 `-0.0` and `0.0` as equal, and `lt`, `le`, `gt` and `ge` are false when either side is
 NaN. The definitions go through Lean's logical float model (`Float.toModel`), and
 lemmas relate them to Lean's `<` and `≤`. `Default` is `+0.0`, so
