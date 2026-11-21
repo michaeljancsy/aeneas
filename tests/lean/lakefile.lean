@@ -39,10 +39,12 @@ package «tests» {}
 @[default_target] lean_lib DropBug
 @[default_target] lean_lib Dyn
 @[default_target] lean_lib DynamicSize
+@[default_target] lean_lib Float32Bits
+@[default_target] lean_lib Float32Ops
+@[default_target] lean_lib Float32Traits
+@[default_target] lean_lib Float32TraitsTests
 @[default_target] lean_lib Float64
 @[default_target] lean_lib Float64Bits
-@[default_target] lean_lib Float32
-@[default_target] lean_lib Float32Bits
 @[default_target] lean_lib FnPtrGeneric
 @[default_target] lean_lib FromTo
 @[default_target] lean_lib GenericUnitOutput

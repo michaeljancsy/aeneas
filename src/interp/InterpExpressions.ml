@@ -106,8 +106,7 @@ let literal_to_tvalue (span : Meta.span) (ty : scalar_type) (cv : literal)
   (* Scalar, boolean... *)
   | TBool, VBool v -> { value = VLiteral (VBool v); ty = TScalar ty }
   | TChar, VChar v -> { value = VLiteral (VChar v); ty = TScalar ty }
-  | TFloat F64, VFloat ({ float_ty = F64; _ } as v)
-  | TFloat F32, VFloat ({ float_ty = F32; _ } as v) ->
+  | TFloat fty, VFloat v when v.float_ty = fty && float_type_is_supported fty ->
       (match float_of_string_opt v.float_value with
       | Some value when classify_float value = FP_nan ->
           [%craise] span "NaN literals require a bit-preserving LLBC encoding"
@@ -988,7 +987,8 @@ let eval_unary_op_symbolic (config : config) (span : Meta.span) (unop : unop)
         | Not, (TScalar TBool as lty) -> lty
         | Not, (TScalar (TInteger (Signed _)) as lty) -> lty
         | Not, (TScalar (TInteger (Unsigned _)) as lty) -> lty
-        | Neg _, (TScalar (TFloat (F64 | F32)) as lty) -> lty
+        | Neg _, (TScalar (TFloat fty) as lty) when float_type_is_supported fty
+          -> lty
         | Neg OPanic, (TScalar (TInteger (Signed _)) as lty) -> lty
         | Neg OPanic, (TScalar (TInteger (Unsigned _)) as lty) -> lty
         | Cast (CastScalar tgt_ty), _ -> TScalar tgt_ty
@@ -1030,16 +1030,17 @@ let eval_binary_op_concrete_compute (span : Meta.span) (binop : binop)
     (v1 : tvalue) (v2 : tvalue) (ctx : eval_ctx) : (tvalue, eval_error) result =
   (* Equality check binops (Eq, Ne) accept values from a wide variety of types.
    * The remaining binops only operate on scalars. *)
-  if
-    v1.ty = TScalar (TFloat F64)
-    || v2.ty = TScalar (TFloat F64)
-    || v1.ty = TScalar (TFloat F32)
-    || v2.ty = TScalar (TFloat F32)
-  then
+  let is_float (v : tvalue) =
+    match v.ty with
+    | TScalar (TFloat _) -> true
+    | _ -> false
+  in
+  if is_float v1 || is_float v2 then
     (* Structural equality is not IEEE equality. Until a concrete IEEE evaluator
        is implemented, reject rather than treating NaN as equal to itself. *)
     [%craise] span
-      "Concrete binary64 evaluation is not supported; use symbolic translation"
+      "Concrete floating-point evaluation is not supported; use symbolic \
+       translation"
   else if binop = Eq || binop = Ne then (
     (* Equality operations *)
     [%cassert] span (v1.ty = v2.ty)
@@ -1186,16 +1187,12 @@ let eval_binary_op_symbolic (config : config) (span : Meta.span) (binop : binop)
         when binop = Lt || binop = Le || binop = Ge || binop = Gt
              || binop = BitAnd || binop = BitOr || binop = BitXor ->
           TScalar TBool
-      | TScalar (TFloat F64), TScalar (TFloat F64) -> (
+      | TScalar (TFloat fty1), TScalar (TFloat fty2)
+        when fty1 = fty2 && float_type_is_supported fty1 -> (
           match binop with
           | Lt | Le | Ge | Gt -> TScalar TBool
-          | Add _ | Sub _ | Mul _ | Div _ -> TScalar (TFloat F64)
-          | _ -> [%craise] span "Unsupported binary64 operation")
-      | TScalar (TFloat F32), TScalar (TFloat F32) -> (
-          match binop with
-          | Lt | Le | Ge | Gt -> TScalar TBool
-          | Add _ | Sub _ | Mul _ | Div _ -> TScalar (TFloat F32)
-          | _ -> [%craise] span "Unsupported binary32 operation")
+          | Add _ | Sub _ | Mul _ | Div _ -> TScalar (TFloat fty1)
+          | _ -> [%craise] span "Unsupported floating-point operation")
       | TScalar lty1, TScalar lty2
         when scalar_type_is_integer lty1 && scalar_type_is_integer lty2 -> (
           let int_ty1, int_ty2 = (ty_as_integer v1.ty, ty_as_integer v2.ty) in

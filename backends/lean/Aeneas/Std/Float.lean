@@ -6,11 +6,14 @@ public section
 /-!
 # Native binary32 and binary64 models
 
-Rust `f64` is translated to Lean `Float`, and Rust `f32` to Lean `Float32`. Each primitive performs one native
-binary64 operation; exceptional values are preserved. Callers implement their
-own rejection policy. NaN payload selection remains a native primitive boundary.
+Rust `f32` is translated to Lean `Float32` and Rust `f64` to Lean `Float`. Each
+primitive performs one native operation in the matching precision; exceptional
+values are preserved. Callers implement their own rejection policy. NaN payload
+selection remains a native primitive boundary.
 -/
 namespace Aeneas.Std
+
+/-! ## binary64 (`f64`) -/
 
 @[expose, rust_fun "core::f64::{f64}::is_finite" -canFail]
 def core.f64.is_finite (x : Float) : Bool := x.isFinite

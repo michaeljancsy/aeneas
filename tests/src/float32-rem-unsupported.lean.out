@@ -1,0 +1,5 @@
+[[92mInfo[39m ] Imported: tests/llbc/float32_rem_unsupported.llbc
+[[91mError[39m] Unsupported floating-point operation
+Source: 'tests/src/float32-rem-unsupported.rs', lines 4:4-4:9
+Compiler source: interp/InterpExpressions.ml, line 1195
+

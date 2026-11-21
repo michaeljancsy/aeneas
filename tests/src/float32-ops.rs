@@ -59,6 +59,17 @@ pub fn subnormal() -> f32 {
 pub fn max_finite() -> f32 {
     3.40282347e38
 }
+pub fn rounding_worst_case() -> f32 {
+    1.00337183e-28
+}
+// Written as literals: Rust's `f32::MIN_POSITIVE` and `f32::EPSILON` constants have no
+// Lean model and would extract as axioms.
+pub fn min_positive_normal() -> f32 {
+    1.17549435e-38
+}
+pub fn epsilon() -> f32 {
+    1.1920929e-7
+}
 pub fn positive_infinity() -> f32 {
     const { 1.0f32 / 0.0f32 }
 }
@@ -102,6 +113,26 @@ pub fn test_ieee() {
     ));
 }
 
+/// Behaviour that tells binary32 apart from binary64: rounding at 24 bits, and signed
+/// zero through operations.
+#[verify::test]
+pub fn test_binary32() {
+    // 2^24 + 1 is not representable in binary32; it rounds back to 2^24.
+    assert!(add(16777216.0, 1.0) == 16777216.0);
+    // True in binary32, false in binary64.
+    assert!(add(0.1, 0.2) == 0.3);
+    assert!(sub(add(1.0, epsilon()), 1.0) == epsilon());
+    assert!(add(1.0, div(epsilon(), 2.0)) == 1.0);
+    // Signed zero, observed through division.
+    assert!(div(1.0, neg(positive_zero())) == negative_infinity());
+    assert!(div(1.0, abs(negative_zero())) == positive_infinity());
+    assert!(div(1.0, sqrt(negative_zero())) == negative_infinity());
+    let root = sqrt(-1.0);
+    assert!(ne(root, root));
+    assert!(rounding_worst_case() > 0.0);
+    assert!(is_finite(min_positive_normal()));
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -110,6 +141,7 @@ mod tests {
     fn native_operations() {
         test_arithmetic();
         test_ieee();
+        test_binary32();
     }
 
     #[test]
@@ -121,5 +153,8 @@ mod tests {
         assert_eq!(max_finite().to_bits(), 0x7f7f_ffff);
         assert_eq!(positive_infinity().to_bits(), 0x7f80_0000);
         assert_eq!(negative_infinity().to_bits(), 0xff80_0000);
+        assert_eq!(rounding_worst_case().to_bits(), 0x10fe_628e);
+        assert_eq!(min_positive_normal().to_bits(), 0x0080_0000);
+        assert_eq!(epsilon().to_bits(), 0x3400_0000);
     }
 }

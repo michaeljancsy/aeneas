@@ -1,0 +1,4 @@
+[[92mInfo[39m ] Imported: tests/llbc/float16_unsupported.llbc
+[[91mError[39m] The Lean backend supports only the f32 and f64 floating-point types
+Compiler source: symbolic/SymbolicToPureTypes.ml, line 47
+

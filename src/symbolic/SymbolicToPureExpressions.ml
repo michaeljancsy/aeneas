@@ -559,8 +559,7 @@ and translate_function_call_aux (call : S.call) (e : S.expr) (ctx : bs_ctx) :
         | [ arg ] ->
             let float_ty : float_type option =
               match arg.ty with
-              | TLiteral (TFloat F64) -> Some F64
-              | TLiteral (TFloat F32) -> Some F32
+              | TLiteral (TFloat fty) -> Some fty
               | _ -> None
             in
             let op =
@@ -659,7 +658,7 @@ and translate_function_call_aux (call : S.call) (e : S.expr) (ctx : bs_ctx) :
               {
                 can_fail =
                   (match arg0.ty with
-                  | TLiteral (TFloat (F64 | F32)) -> false
+                  | TLiteral (TFloat _) -> false
                   | _ -> ExpressionsUtils.binop_can_fail binop);
                 can_diverge = false;
                 is_rec = false;
@@ -682,14 +681,10 @@ and translate_function_call_aux (call : S.call) (e : S.expr) (ctx : bs_ctx) :
             in
             let binop =
               match (arg0.ty, binop) with
-              | TLiteral (TFloat F64), Expressions.Add _ -> FloatAdd F64
-              | TLiteral (TFloat F64), Expressions.Sub _ -> FloatSub F64
-              | TLiteral (TFloat F64), Expressions.Mul _ -> FloatMul F64
-              | TLiteral (TFloat F64), Expressions.Div _ -> FloatDiv F64
-              | TLiteral (TFloat F32), Expressions.Add _ -> FloatAdd F32
-              | TLiteral (TFloat F32), Expressions.Sub _ -> FloatSub F32
-              | TLiteral (TFloat F32), Expressions.Mul _ -> FloatMul F32
-              | TLiteral (TFloat F32), Expressions.Div _ -> FloatDiv F32
+              | TLiteral (TFloat fty), Expressions.Add _ -> FloatAdd fty
+              | TLiteral (TFloat fty), Expressions.Sub _ -> FloatSub fty
+              | TLiteral (TFloat fty), Expressions.Mul _ -> FloatMul fty
+              | TLiteral (TFloat fty), Expressions.Div _ -> FloatDiv fty
               | _ -> (
                   match binop with
                   | Expressions.BitXor ->
