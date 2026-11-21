@@ -710,6 +710,11 @@ let eval_unary_op_concrete (config : config) (span : Meta.span) (unop : unop)
         let value = VLiteral (VBool b) in
         let ty = TScalar TBool in
         Ok { ty; value }
+    | _, VLiteral (VFloat _) | Cast (CastScalar (TFloat _)), _ ->
+        (* As for binary operations: no concrete IEEE evaluator yet. *)
+        [%craise] span
+          "Concrete floating-point evaluation is not supported; use symbolic \
+           translation"
     | _ -> [%craise] span ("Invalid input for unop: " ^ unop_to_string ctx unop)
   in
   (r, ctx, cc)

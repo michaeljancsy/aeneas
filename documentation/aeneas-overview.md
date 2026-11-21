@@ -243,8 +243,11 @@ Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy` and
 example `max`, `floor`, `to_bits`, `PartialOrd` and `f32::EPSILON`) are extracted
 as axioms or not supported; write constants as literals.
 
+Casts (`as`) follow Rust: float to integer rounds toward zero, sends NaN to `0` and
+saturates at the integer type's bounds; integer to float and `f64` to `f32` round to
+nearest (ties to even); `f32` to `f64` is exact. They never fail.
+
 Not yet supported:
-- casts to or from float types (`as`);
 - `%` on floats;
 - NaN literals;
 - `f16` and `f128`;

@@ -484,8 +484,42 @@ let extract_cast_kind_gen (span : Meta.span)
                 boolean), it gets compiled to [b] (i.e., no cast
                 is introduced). *)
              [%craise] span "Unexpected cast: bool to bool"
+         | TFloat src, TFloat tgt when backend () = Lean -> (
+             (* Rust rounds f64 -> f32 to nearest; f32 -> f64 is exact. *)
+             match (src, tgt) with
+             | F64, F32 -> ("Float.castToFloat32", None, None)
+             | F32, F64 -> ("Float32.castToFloat", None, None)
+             | _ ->
+                 [%craise] span
+                   "Unexpected cast between identical or unsupported float \
+                    types")
+         | TFloat src, (TInt _ | TUInt _) when backend () = Lean ->
+             (* Rust truncates toward zero, sends NaN to 0 and saturates. *)
+             let tgt = literal_as_integer tgt in
+             let cast_str =
+               float_name src
+               ^
+               if Scalars.integer_type_is_signed tgt then ".toIScalar"
+               else ".toUScalar"
+             in
+             (cast_str, None, Some (integer_type_to_string tgt))
+         | (TInt _ | TUInt _), TFloat tgt when backend () = Lean ->
+             (* Rust rounds to the nearest float. *)
+             let src = literal_as_integer src in
+             let scalar =
+               if Scalars.integer_type_is_signed src then "IScalar"
+               else "UScalar"
+             in
+             let to_float =
+               match tgt with
+               | F64 -> ".toFloat"
+               | F32 -> ".toFloat32"
+               | F16 | F128 -> [%internal_error] span
+             in
+             (scalar ^ to_float, None, None)
          | TFloat _, _ | _, TFloat _ ->
-             [%craise] span "Floating-point casts are not supported"
+             [%craise] span
+               "Floating-point casts are only supported by the Lean backend"
          | _ -> [%craise] span "Unreachable"
        in
        (* Print the name of the function *)
