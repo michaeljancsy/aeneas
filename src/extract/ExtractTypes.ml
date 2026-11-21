@@ -117,6 +117,34 @@ let extract_literal (span : Meta.span) (fmt : F.formatter) ~(is_pattern : bool)
         if Z.sign bits < 0 then Z.add bits (Z.shift_left Z.one 64) else bits
       in
       F.pp_print_string fmt ("(Float.ofBits " ^ Z.to_string bits ^ ")")
+  | VFloat { float_ty = F32; float_value } when backend () = Lean ->
+      (* Charon serializes binary32 constants as decimal strings with enough
+         digits (9) to identify a unique binary32 value. Parse to binary64, then
+         round to binary32. That double rounding is safe only if the decimal is
+         well away from a binary32 rounding boundary, so check it explicitly. *)
+      let value =
+        match float_of_string_opt float_value with
+        | Some value -> value
+        | None -> [%craise] span "Invalid binary32 literal from Charon"
+      in
+      [%cassert] span
+        (classify_float value <> FP_nan)
+        "NaN literals require a bit-preserving LLBC encoding";
+      let bits32 = Int32.bits_of_float value in
+      let rounded = Int32.float_of_bits bits32 in
+      (if Float.is_finite rounded then
+         let _, e = Float.frexp rounded in
+         (* Spacing of binary32 values near [rounded] (subnormal floor 2^-149). *)
+         let ulp = Float.ldexp 1.0 (max (e - 24) (-149)) in
+         [%cassert] span
+           (Float.abs (value -. rounded) < ulp /. 4.0)
+           ("binary32 literal is too close to a rounding boundary: "
+          ^ float_value));
+      let bits = Z.of_int32 bits32 in
+      let bits =
+        if Z.sign bits < 0 then Z.add bits (Z.shift_left Z.one 32) else bits
+      in
+      F.pp_print_string fmt ("(Float32.ofBits " ^ Z.to_string bits ^ ")")
   | VChar _ | VFloat _ | VByteStr _ ->
       [%admit_raise] span
         "Float, string, non-ASCII chars and byte string literals are \

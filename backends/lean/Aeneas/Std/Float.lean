@@ -4,9 +4,9 @@ public import Aeneas.Std.Core.Cmp
 public section
 
 /-!
-# Native binary64 model
+# Native binary32 and binary64 models
 
-Rust `f64` is translated to Lean `Float`. Each primitive performs one native
+Rust `f64` is translated to Lean `Float`, and Rust `f32` to Lean `Float32`. Each primitive performs one native
 binary64 operation; exceptional values are preserved. Callers implement their
 own rejection policy. NaN payload selection remains a native primitive boundary.
 -/
@@ -43,5 +43,39 @@ def core.cmp.impls.PartialEqF64.ne (x y : Float) : Bool := x != y
 def core.cmp.PartialEqF64 : core.cmp.PartialEq Float Float where
   eq := liftFun2 core.cmp.impls.PartialEqF64.eq
   ne := liftFun2 core.cmp.impls.PartialEqF64.ne
+
+/-! ## binary32 (`f32`) -/
+
+@[expose, rust_fun "core::f32::{f32}::is_finite" -canFail]
+def core.f32.is_finite (x : Float32) : Bool := x.isFinite
+
+@[expose, rust_fun "core::f32::{f32}::abs" -canFail]
+def core.f32.abs (x : Float32) : Float32 := x.abs
+
+@[expose, rust_fun "std::f32::{f32}::sqrt" -canFail]
+def std.f32.sqrt (x : Float32) : Float32 := x.sqrt
+
+@[expose, rust_fun "core::clone::impls::{core::clone::Clone<f32>}::clone" -canFail]
+def core.clone.impls.CloneF32.clone (x : Float32) : Float32 := x
+
+@[expose, reducible, rust_trait_impl "core::clone::Clone<f32>"]
+def core.clone.CloneF32 : core.clone.Clone Float32 where
+  clone := fun x => .ok x
+  clone_from := fun _ x => .ok x
+
+@[expose, reducible, rust_trait_impl "core::marker::Copy<f32>"]
+def core.marker.CopyF32 : core.marker.Copy Float32 where
+  cloneInst := core.clone.CloneF32
+
+@[expose, rust_fun "core::cmp::impls::{core::cmp::PartialEq<f32, f32>}::eq" -canFail]
+def core.cmp.impls.PartialEqF32.eq (x y : Float32) : Bool := x == y
+
+@[expose, rust_fun "core::cmp::impls::{core::cmp::PartialEq<f32, f32>}::ne" -canFail]
+def core.cmp.impls.PartialEqF32.ne (x y : Float32) : Bool := x != y
+
+@[expose, reducible, rust_trait_impl "core::cmp::PartialEq<f32, f32>"]
+def core.cmp.PartialEqF32 : core.cmp.PartialEq Float32 Float32 where
+  eq := liftFun2 core.cmp.impls.PartialEqF32.eq
+  ne := liftFun2 core.cmp.impls.PartialEqF32.ne
 
 end Aeneas.Std

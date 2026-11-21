@@ -41,6 +41,8 @@ package «tests» {}
 @[default_target] lean_lib DynamicSize
 @[default_target] lean_lib Float64
 @[default_target] lean_lib Float64Bits
+@[default_target] lean_lib Float32
+@[default_target] lean_lib Float32Bits
 @[default_target] lean_lib FnPtrGeneric
 @[default_target] lean_lib FromTo
 @[default_target] lean_lib GenericUnitOutput

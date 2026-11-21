@@ -41,9 +41,10 @@ let translate_literal_type (ty : V.scalar_type) : literal_type =
   match ty with
   | V.TInteger (Signed x) -> TInt x
   | V.TInteger (Unsigned x) -> TUInt x
-  | V.TFloat x when Config.backend () = Config.Lean && x <> F64 ->
+  | V.TFloat x when Config.backend () = Config.Lean && x <> F64 && x <> F32 ->
       [%craise_opt_span] None
-        "The Lean backend currently supports only f64 floating-point types"
+        "The Lean backend currently supports only f32 and f64 floating-point \
+         types"
   | V.TFloat x -> TFloat x
   | V.TBool -> TBool
   | V.TChar -> TChar

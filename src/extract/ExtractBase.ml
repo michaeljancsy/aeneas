@@ -534,9 +534,11 @@ let int_name (int_ty : integer_type) : string =
 
 let float_name (float_ty : float_type) : string =
   if backend () = Lean && float_ty = F64 then "Float"
+  else if backend () = Lean && float_ty = F32 then "Float32"
   else if backend () = Lean then
     [%craise_opt_span] None
-      "The Lean backend currently supports only f64 floating-point types"
+      "The Lean backend currently supports only f32 and f64 floating-point \
+       types"
   else
     let format =
       match backend () with
@@ -943,6 +945,7 @@ let unop_name (unop : unop) : string =
       | Coq -> if Option.is_none ty then "negb" else "scalar_not"
       | HOL4 -> "~")
   | FloatNeg F64 when backend () = Lean -> "Float.neg"
+  | FloatNeg F32 when backend () = Lean -> "Float32.neg"
   | FloatNeg _ ->
       [%craise_opt_span] None
         "Floating-point negation requires the Lean binary64 backend"
@@ -973,6 +976,10 @@ let named_binop_name (binop : binop) : string =
   | FloatSub F64 when backend () = Lean -> "Float.sub"
   | FloatMul F64 when backend () = Lean -> "Float.mul"
   | FloatDiv F64 when backend () = Lean -> "Float.div"
+  | FloatAdd F32 when backend () = Lean -> "Float32.add"
+  | FloatSub F32 when backend () = Lean -> "Float32.sub"
+  | FloatMul F32 when backend () = Lean -> "Float32.mul"
+  | FloatDiv F32 when backend () = Lean -> "Float32.div"
   | FloatAdd _ | FloatSub _ | FloatMul _ | FloatDiv _ ->
       [%craise_opt_span] None
         "Floating-point arithmetic requires the Lean binary64 backend"

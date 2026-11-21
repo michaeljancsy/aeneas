@@ -594,7 +594,9 @@ let extract_binop (span : Meta.span) (ctx : extraction_ctx)
   if inside then F.pp_print_string fmt "(";
   (* Some binary operations have a special notation depending on the backend *)
   (match (backend (), binop) with
-  | Lean, (Eq (TLiteral (TFloat F64)) | Ne (TLiteral (TFloat F64))) ->
+  | ( Lean,
+      (Eq (TLiteral (TFloat (F64 | F32))) | Ne (TLiteral (TFloat (F64 | F32))))
+    ) ->
       (* Rust equality is IEEE equality: NaN != NaN and +0 == -0.
          Lean propositional equality on Float would be the wrong operation. *)
       extract_expr ~inside:true arg0;
