@@ -48,6 +48,7 @@ package «tests» {}
 @[default_target] lean_lib FloatCasts
 @[default_target] lean_lib FloatCastsModel
 @[default_target] lean_lib FloatCastsWidths
+@[default_target] lean_lib FloatOrdering
 @[default_target] lean_lib FloatRem
 @[default_target] lean_lib FnPtrGeneric
 @[default_target] lean_lib FromTo

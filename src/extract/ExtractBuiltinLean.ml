@@ -469,6 +469,36 @@ let lean_builtin_funs =
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 229 *)
     mk_fun "core::cmp::impls::{core::cmp::PartialOrd<(), ()>}::partial_cmp"
       "core.cmp.impls.PartialOrdUnit.partial_cmp";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 75 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f32, f32>}::ge"
+      "core.cmp.impls.PartialOrdF32.ge" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 72 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f32, f32>}::gt"
+      "core.cmp.impls.PartialOrdF32.gt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 69 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f32, f32>}::le"
+      "core.cmp.impls.PartialOrdF32.le" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 66 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f32, f32>}::lt"
+      "core.cmp.impls.PartialOrdF32.lt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 62 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f32, f32>}::partial_cmp"
+      "core.cmp.impls.PartialOrdF32.partial_cmp" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 41 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f64, f64>}::ge"
+      "core.cmp.impls.PartialOrdF64.ge" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 38 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f64, f64>}::gt"
+      "core.cmp.impls.PartialOrdF64.gt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 35 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f64, f64>}::le"
+      "core.cmp.impls.PartialOrdF64.le" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 32 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f64, f64>}::lt"
+      "core.cmp.impls.PartialOrdF64.lt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 28 *)
+    mk_fun "core::cmp::impls::{core::cmp::PartialOrd<f64, f64>}::partial_cmp"
+      "core.cmp.impls.PartialOrdF64.partial_cmp" ~can_fail:false;
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 212 *)
     mk_fun "core::cmp::max" "core.cmp.max";
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 207 *)
@@ -490,6 +520,12 @@ let lean_builtin_funs =
     (* file: "Aeneas/Std/Core/Default.lean", line: 12 *)
     mk_fun "core::default::{core::default::Default<bool>}::default"
       "core.default.DefaultBool.default";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 87 *)
+    mk_fun "core::default::{core::default::Default<f32>}::default"
+      "core.default.DefaultF32.default";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 53 *)
+    mk_fun "core::default::{core::default::Default<f64>}::default"
+      "core.default.DefaultF64.default";
     (* file: "Aeneas/Std/Float.lean", line: 55 *)
     mk_fun "core::f32::{f32}::abs" "core.f32.abs" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 52 *)
@@ -1591,6 +1627,10 @@ let lean_builtin_trait_impls =
     (* file: "Aeneas/Std/Core/Cmp.lean", line: 287 *)
     mk_trait_impl "core::cmp::PartialOrd<&'a @A, &'b @B>"
       "core.cmp.PartialOrdShared";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 78 *)
+    mk_trait_impl "core::cmp::PartialOrd<f32, f32>" "core.cmp.PartialOrdF32";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 44 *)
+    mk_trait_impl "core::cmp::PartialOrd<f64, f64>" "core.cmp.PartialOrdF64";
     (* file: "Aeneas/Std/Alloc/Boxed.lean", line: 38 *)
     mk_trait_impl "core::convert::AsMut<Box<@T>, @T>" "core.convert.AsMutBox";
     (* file: "Aeneas/Std/Array/ArraySlice.lean", line: 486 *)
@@ -1626,6 +1666,10 @@ let lean_builtin_trait_impls =
       "core.default.DefaultArrayEmpty";
     (* file: "Aeneas/Std/Array/Array.lean", line: 461 *)
     mk_trait_impl "core::default::Default<[@T; @N]>" "core.default.DefaultArray";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 90 *)
+    mk_trait_impl "core::default::Default<f32>" "core.default.DefaultF32";
+    (* file: "Aeneas/Std/FloatOrd.lean", line: 56 *)
+    mk_trait_impl "core::default::Default<f64>" "core.default.DefaultF64";
     (* file: "Aeneas/Std/Core/Fmt.lean", line: 179 *)
     mk_trait_impl "core::fmt::Debug<&'0 @T>" "core.fmt.DebugShared";
     (* file: "Aeneas/Std/Core/Fmt.lean", line: 185 *)

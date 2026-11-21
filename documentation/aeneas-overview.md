@@ -238,10 +238,17 @@ comparisons: `==` and `!=` give `NaN != NaN` and `0.0 == -0.0`, and `<`, `<=`, `
 and `>=` are false when either side is NaN. Float literals are emitted as exact bit
 patterns, for example `Float32.ofBits 1036831949` for `0.1f32`.
 
-Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy` and
-`PartialEq` have Lean models. Other float methods, traits and constants (for
-example `max`, `floor`, `to_bits`, `PartialOrd` and `f32::EPSILON`) are extracted
+Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy`,
+`PartialEq`, `PartialOrd` and `Default` have Lean models. Other float methods, traits
+and constants (for example `max`, `floor`, `to_bits` and `f32::EPSILON`) are extracted
 as axioms or not supported; write constants as literals.
+
+`PartialOrd` (in `Aeneas/Std/FloatOrd.lean`) is used by method calls such as
+`x.partial_cmp(&y)`, by generic code and by `#[derive(PartialOrd)]`: `partial_cmp` is `none` when either side is NaN and treats
+`-0.0` and `0.0` as equal, and `lt`, `le`, `gt` and `ge` are false when either side is
+NaN. The definitions go through Lean's logical float model (`Float.toModel`), and
+lemmas relate them to Lean's `<` and `≤`. `Default` is `+0.0`, so
+`#[derive(Default)]` works on types with float fields.
 
 Casts (`as`) follow Rust and never fail. Float to integer rounds toward zero, sends NaN
 to `0`, and saturates at the integer type's bounds. Integer to float, and `f64` to `f32`,
