@@ -103,6 +103,12 @@ let mk_fun ?(keep_params : bool list option = None)
   in
   (rust_name, f)
 
+(** A Rust global (top-level or associated constant) modelled in the standard
+    library. *)
+let mk_global ?(can_fail = false) (rust_name : string) (extract_name : string) :
+    Pure.builtin_global_info =
+  { rust_name; extract_name; can_fail }
+
 let mk_type ?(keep_params : bool list option = None)
     ?(kind : type_variant_kind = KOpaque) ?(mut_regions : int list = [])
     ?(prefix_variant_names : bool = true) (rust_name : string)
