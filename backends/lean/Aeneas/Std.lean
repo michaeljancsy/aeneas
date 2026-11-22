@@ -6,6 +6,7 @@ public import Aeneas.Std.Float
 public import Aeneas.Std.FloatCasts
 public import Aeneas.Std.FloatOrd
 public import Aeneas.Std.FloatRem
+public import Aeneas.Std.FloatRound
 public import Aeneas.Std.Primitives
 public import Aeneas.Std.PrimitivesLemmas
 public import Aeneas.Std.RawPtr

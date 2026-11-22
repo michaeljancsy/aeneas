@@ -50,6 +50,8 @@ package «tests» {}
 @[default_target] lean_lib FloatCastsWidths
 @[default_target] lean_lib FloatOrdering
 @[default_target] lean_lib FloatRem
+@[default_target] lean_lib FloatRounding
+@[default_target] lean_lib FloatRoundingModel
 @[default_target] lean_lib FnPtrGeneric
 @[default_target] lean_lib FromTo
 @[default_target] lean_lib GenericUnitOutput
