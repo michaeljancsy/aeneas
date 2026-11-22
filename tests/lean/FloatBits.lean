@@ -21,43 +21,40 @@ set_option maxRecDepth 2048
 namespace float_bits
 
 /-- [float_bits::div32]:
-    Source: 'tests/src/float-bits.rs', lines 9:0-11:1
+    Source: 'tests/src/float-bits.rs', lines 13:0-15:1
     Visibility: public -/
 def div32 (x : Float32) (y : Float32) : Result Float32 := do
   ok (Float32.div x y)
 
 /-- [float_bits::div64]:
-    Source: 'tests/src/float-bits.rs', lines 12:0-14:1
+    Source: 'tests/src/float-bits.rs', lines 16:0-18:1
     Visibility: public -/
 def div64 (x : Float) (y : Float) : Result Float := do
   ok (Float.div x y)
 
 /-- [float_bits::test_bits32]:
-    Source: 'tests/src/float-bits.rs', lines 17:0-32:1
+    Source: 'tests/src/float-bits.rs', lines 21:0-35:1
     Visibility: public -/
 def test_bits32 : Result Unit := do
-  let i ← lift (core.f32.to_bits (Float32.ofBits 1065353216))
+  let i ← core.f32.to_bits (Float32.ofBits 1065353216)
   massert (i = 1065353216#u32)
-  let i1 ← lift (core.f32.to_bits (Float32.ofBits 2147483648))
+  let i1 ← core.f32.to_bits (Float32.ofBits 2147483648)
   massert (i1 = 2147483648#u32)
   let fl ← lift (core.f32.from_bits 1078530011#u32)
   massert (fl == (Float32.ofBits 1078530011))
   let fl1 ← lift (core.f32.from_bits 1#u32)
-  let i2 ← lift (core.f32.to_bits fl1)
+  let i2 ← core.f32.to_bits fl1
   massert (i2 = 1#u32)
   let fl2 ← lift (core.f32.from_bits 4286578688#u32)
   massert (fl2 == core.f32.F32.NEG_INFINITY)
   let fl3 ← lift (core.f32.from_bits 2143289344#u32)
   let b ← lift (core.f32.is_nan fl3)
   massert b
-  let fl4 ← lift (core.f32.from_bits 2143289344#u32)
-  let i3 ← lift (core.f32.to_bits fl4)
-  massert (i3 = 2143289344#u32)
-  let fl5 ← lift (core.f32.from_bits 2139095041#u32)
-  let b1 ← lift (core.f32.is_nan fl5)
+  let fl4 ← lift (core.f32.from_bits 2139095041#u32)
+  let b1 ← lift (core.f32.is_nan fl4)
   massert b1
-  let fl6 ← div32 (Float32.ofBits 0) (Float32.ofBits 0)
-  let b2 ← lift (core.f32.is_nan fl6)
+  let fl5 ← div32 (Float32.ofBits 0) (Float32.ofBits 0)
+  let b2 ← lift (core.f32.is_nan fl5)
   massert b2
   let b3 ← lift (core.f32.is_nan (Float32.ofBits 1065353216))
   massert (¬ b3)
@@ -67,14 +64,14 @@ def test_bits32 : Result Unit := do
   massert b5
   let b6 ← lift (core.f32.is_infinite core.f32.F32.MAX)
   massert (¬ b6)
-  let b7 ← lift (core.f32.is_infinite fl6)
+  let b7 ← lift (core.f32.is_infinite fl5)
   massert (¬ b7)
 
 /- Unit test for [float_bits::test_bits32] -/
 #guard (test_bits32).reducesTo ()
 
 /-- [float_bits::test_classify32]:
-    Source: 'tests/src/float-bits.rs', lines 35:0-55:1
+    Source: 'tests/src/float-bits.rs', lines 38:0-57:1
     Visibility: public -/
 def test_classify32 : Result Unit := do
   let b ← lift (core.f32.is_normal (Float32.ofBits 1065353216))
@@ -107,25 +104,22 @@ def test_classify32 : Result Unit := do
   massert (¬ b11)
   let b12 ← lift (core.f32.is_subnormal fl)
   massert (¬ b12)
-  let b13 ← lift (core.f32.is_sign_positive (Float32.ofBits 0))
+  let b13 ← core.f32.is_sign_positive (Float32.ofBits 0)
   massert b13
-  let b14 ← lift (core.f32.is_sign_negative (Float32.ofBits 2147483648))
+  let b14 ← core.f32.is_sign_negative (Float32.ofBits 2147483648)
   massert b14
-  let b15 ← lift (core.f32.is_sign_positive (Float32.ofBits 2147483648))
+  let b15 ← core.f32.is_sign_positive (Float32.ofBits 2147483648)
   massert (¬ b15)
-  let b16 ← lift (core.f32.is_sign_negative core.f32.F32.NEG_INFINITY)
+  let b16 ← core.f32.is_sign_negative core.f32.F32.NEG_INFINITY
   massert b16
-  let b17 ← lift (core.f32.is_sign_positive core.f32.F32.INFINITY)
+  let b17 ← core.f32.is_sign_positive core.f32.F32.INFINITY
   massert b17
-  let fl4 ← lift (core.f32.from_bits 2143289344#u32)
-  let b18 ← lift (core.f32.is_sign_positive fl4)
-  massert b18
 
 /- Unit test for [float_bits::test_classify32] -/
 #guard (test_classify32).reducesTo ()
 
 /-- [float_bits::test_sign32]:
-    Source: 'tests/src/float-bits.rs', lines 58:0-79:1
+    Source: 'tests/src/float-bits.rs', lines 60:0-80:1
     Visibility: public -/
 def test_sign32 : Result Unit := do
   let fl ← lift (core.f32.signum (Float32.ofBits 1080033280))
@@ -133,10 +127,10 @@ def test_sign32 : Result Unit := do
   let fl1 ← lift (core.f32.signum (Float32.ofBits 3227516928))
   massert (fl1 == (Float32.ofBits 3212836864))
   let fl2 ← lift (core.f32.signum (Float32.ofBits 0))
-  let i ← lift (core.f32.to_bits fl2)
+  let i ← core.f32.to_bits fl2
   massert (i = 1065353216#u32)
   let fl3 ← lift (core.f32.signum (Float32.ofBits 2147483648))
-  let i1 ← lift (core.f32.to_bits fl3)
+  let i1 ← core.f32.to_bits fl3
   massert (i1 = 3212836864#u32)
   let fl4 ← lift (core.f32.signum core.f32.F32.NEG_INFINITY)
   massert (fl4 == (Float32.ofBits 3212836864))
@@ -145,119 +139,113 @@ def test_sign32 : Result Unit := do
   let b ← lift (core.f32.is_nan fl6)
   massert b
   let fl7 ←
-    lift (core.f32.copysign (Float32.ofBits 1080033280)
-      (Float32.ofBits 2147483648))
+    core.f32.copysign (Float32.ofBits 1080033280) (Float32.ofBits 2147483648)
   massert (fl7 == (Float32.ofBits 3227516928))
   let fl8 ←
-    lift (core.f32.copysign (Float32.ofBits 3227516928)
-      (Float32.ofBits 1065353216))
+    core.f32.copysign (Float32.ofBits 3227516928) (Float32.ofBits 1065353216)
   massert (fl8 == (Float32.ofBits 1080033280))
-  let fl9 ←
-    lift (core.f32.copysign (Float32.ofBits 0) (Float32.ofBits 3212836864))
-  let i2 ← lift (core.f32.to_bits fl9)
+  let fl9 ← core.f32.copysign (Float32.ofBits 0) (Float32.ofBits 3212836864)
+  let i2 ← core.f32.to_bits fl9
   massert (i2 = 2147483648#u32)
   let fl10 ←
-    lift (core.f32.copysign core.f32.F32.INFINITY (Float32.ofBits 3221225472))
+    core.f32.copysign core.f32.F32.INFINITY (Float32.ofBits 3221225472)
   massert (fl10 == core.f32.F32.NEG_INFINITY)
-  let fl11 ← lift (core.f32.from_bits 2143289344#u32)
-  let fl12 ← lift (core.f32.copysign (Float32.ofBits 1065353216) fl11)
-  massert (fl12 == (Float32.ofBits 1065353216))
-  let fl13 ← lift (core.f32.copysign fl5 (Float32.ofBits 3212836864))
-  let b1 ← lift (core.f32.is_nan fl13)
+  let fl11 ← core.f32.copysign fl5 (Float32.ofBits 3212836864)
+  let b1 ← lift (core.f32.is_nan fl11)
   massert b1
-  let fl14 ← lift (core.f32.recip (Float32.ofBits 1073741824))
-  massert (fl14 == (Float32.ofBits 1056964608))
-  let fl15 ← lift (core.f32.recip (Float32.ofBits 1077936128))
-  massert (fl15 == (Float32.ofBits 1051372203))
-  let fl16 ← lift (core.f32.recip (Float32.ofBits 0))
-  massert (fl16 == core.f32.F32.INFINITY)
-  let fl17 ← lift (core.f32.recip (Float32.ofBits 2147483648))
-  massert (fl17 == core.f32.F32.NEG_INFINITY)
-  let fl18 ← lift (core.f32.recip core.f32.F32.INFINITY)
-  let i3 ← lift (core.f32.to_bits fl18)
+  let fl12 ← lift (core.f32.recip (Float32.ofBits 1073741824))
+  massert (fl12 == (Float32.ofBits 1056964608))
+  let fl13 ← lift (core.f32.recip (Float32.ofBits 1077936128))
+  massert (fl13 == (Float32.ofBits 1051372203))
+  let fl14 ← lift (core.f32.recip (Float32.ofBits 0))
+  massert (fl14 == core.f32.F32.INFINITY)
+  let fl15 ← lift (core.f32.recip (Float32.ofBits 2147483648))
+  massert (fl15 == core.f32.F32.NEG_INFINITY)
+  let fl16 ← lift (core.f32.recip core.f32.F32.INFINITY)
+  let i3 ← core.f32.to_bits fl16
   massert (i3 = 0#u32)
-  let fl19 ← lift (core.f32.recip core.f32.F32.MAX)
-  let b2 ← lift (core.f32.is_subnormal fl19)
+  let fl17 ← lift (core.f32.recip core.f32.F32.MAX)
+  let b2 ← lift (core.f32.is_subnormal fl17)
   massert b2
-  let fl20 ← lift (core.f32.from_bits 1#u32)
-  let fl21 ← lift (core.f32.recip fl20)
-  massert (fl21 == core.f32.F32.INFINITY)
-  let fl22 ← lift (core.f32.recip fl5)
-  let b3 ← lift (core.f32.is_nan fl22)
+  let fl18 ← lift (core.f32.from_bits 1#u32)
+  let fl19 ← lift (core.f32.recip fl18)
+  massert (fl19 == core.f32.F32.INFINITY)
+  let fl20 ← lift (core.f32.recip fl5)
+  let b3 ← lift (core.f32.is_nan fl20)
   massert b3
 
 /- Unit test for [float_bits::test_sign32] -/
 #guard (test_sign32).reducesTo ()
 
 /-- [float_bits::test_consts32]:
-    Source: 'tests/src/float-bits.rs', lines 82:0-126:1
+    Source: 'tests/src/float-bits.rs', lines 83:0-127:1
     Visibility: public -/
 def test_consts32 : Result Unit := do
-  let i ← lift (core.f32.to_bits core.f32.consts.PI)
+  let i ← core.f32.to_bits core.f32.consts.PI
   massert (i = 1078530011#u32)
-  let i1 ← lift (core.f32.to_bits core.f32.consts.TAU)
+  let i1 ← core.f32.to_bits core.f32.consts.TAU
   massert (i1 = 1086918619#u32)
-  let i2 ← lift (core.f32.to_bits core.f32.consts.GOLDEN_RATIO)
+  let i2 ← core.f32.to_bits core.f32.consts.GOLDEN_RATIO
   massert (i2 = 1070537661#u32)
-  let i3 ← lift (core.f32.to_bits core.f32.consts.EULER_GAMMA)
+  let i3 ← core.f32.to_bits core.f32.consts.EULER_GAMMA
   massert (i3 = 1058260072#u32)
-  let i4 ← lift (core.f32.to_bits core.f32.consts.FRAC_PI_2)
+  let i4 ← core.f32.to_bits core.f32.consts.FRAC_PI_2
   massert (i4 = 1070141403#u32)
-  let i5 ← lift (core.f32.to_bits core.f32.consts.FRAC_PI_3)
+  let i5 ← core.f32.to_bits core.f32.consts.FRAC_PI_3
   massert (i5 = 1065749138#u32)
-  let i6 ← lift (core.f32.to_bits core.f32.consts.FRAC_PI_4)
+  let i6 ← core.f32.to_bits core.f32.consts.FRAC_PI_4
   massert (i6 = 1061752795#u32)
-  let i7 ← lift (core.f32.to_bits core.f32.consts.FRAC_PI_6)
+  let i7 ← core.f32.to_bits core.f32.consts.FRAC_PI_6
   massert (i7 = 1057360530#u32)
-  let i8 ← lift (core.f32.to_bits core.f32.consts.FRAC_PI_8)
+  let i8 ← core.f32.to_bits core.f32.consts.FRAC_PI_8
   massert (i8 = 1053364187#u32)
-  let i9 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_PI)
+  let i9 ← core.f32.to_bits core.f32.consts.FRAC_1_PI
   massert (i9 = 1050868099#u32)
-  let i10 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_SQRT_PI)
+  let i10 ← core.f32.to_bits core.f32.consts.FRAC_1_SQRT_PI
   massert (i10 = 1058041531#u32)
-  let i11 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_SQRT_2PI)
+  let i11 ← core.f32.to_bits core.f32.consts.FRAC_1_SQRT_2PI
   massert (i11 = 1053573674#u32)
-  let i12 ← lift (core.f32.to_bits core.f32.consts.FRAC_2_PI)
+  let i12 ← core.f32.to_bits core.f32.consts.FRAC_2_PI
   massert (i12 = 1059256707#u32)
-  let i13 ← lift (core.f32.to_bits core.f32.consts.FRAC_2_SQRT_PI)
+  let i13 ← core.f32.to_bits core.f32.consts.FRAC_2_SQRT_PI
   massert (i13 = 1066430139#u32)
-  let i14 ← lift (core.f32.to_bits core.f32.consts.SQRT_2)
+  let i14 ← core.f32.to_bits core.f32.consts.SQRT_2
   massert (i14 = 1068827891#u32)
-  let i15 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_SQRT_2)
+  let i15 ← core.f32.to_bits core.f32.consts.FRAC_1_SQRT_2
   massert (i15 = 1060439283#u32)
-  let i16 ← lift (core.f32.to_bits core.f32.consts.SQRT_3)
+  let i16 ← core.f32.to_bits core.f32.consts.SQRT_3
   massert (i16 = 1071494103#u32)
-  let i17 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_SQRT_3)
+  let i17 ← core.f32.to_bits core.f32.consts.FRAC_1_SQRT_3
   massert (i17 = 1058262330#u32)
-  let i18 ← lift (core.f32.to_bits core.f32.consts.SQRT_5)
+  let i18 ← core.f32.to_bits core.f32.consts.SQRT_5
   massert (i18 = 1074731965#u32)
-  let i19 ← lift (core.f32.to_bits core.f32.consts.FRAC_1_SQRT_5)
+  let i19 ← core.f32.to_bits core.f32.consts.FRAC_1_SQRT_5
   massert (i19 = 1055193390#u32)
-  let i20 ← lift (core.f32.to_bits core.f32.consts.E)
+  let i20 ← core.f32.to_bits core.f32.consts.E
   massert (i20 = 1076754516#u32)
-  let i21 ← lift (core.f32.to_bits core.f32.consts.LOG2_E)
+  let i21 ← core.f32.to_bits core.f32.consts.LOG2_E
   massert (i21 = 1069066811#u32)
-  let i22 ← lift (core.f32.to_bits core.f32.consts.LOG2_10)
+  let i22 ← core.f32.to_bits core.f32.consts.LOG2_10
   massert (i22 = 1079286392#u32)
-  let i23 ← lift (core.f32.to_bits core.f32.consts.LOG10_E)
+  let i23 ← core.f32.to_bits core.f32.consts.LOG10_E
   massert (i23 = 1054759897#u32)
-  let i24 ← lift (core.f32.to_bits core.f32.consts.LOG10_2)
+  let i24 ← core.f32.to_bits core.f32.consts.LOG10_2
   massert (i24 = 1050288283#u32)
-  let i25 ← lift (core.f32.to_bits core.f32.consts.LN_2)
+  let i25 ← core.f32.to_bits core.f32.consts.LN_2
   massert (i25 = 1060205080#u32)
-  let i26 ← lift (core.f32.to_bits core.f32.consts.LN_10)
+  let i26 ← core.f32.to_bits core.f32.consts.LN_10
   massert (i26 = 1075010958#u32)
-  let i27 ← lift (core.f32.to_bits core.f32.F32.EPSILON)
+  let i27 ← core.f32.to_bits core.f32.F32.EPSILON
   massert (i27 = 872415232#u32)
-  let i28 ← lift (core.f32.to_bits core.f32.F32.MIN)
+  let i28 ← core.f32.to_bits core.f32.F32.MIN
   massert (i28 = 4286578687#u32)
-  let i29 ← lift (core.f32.to_bits core.f32.F32.MAX)
+  let i29 ← core.f32.to_bits core.f32.F32.MAX
   massert (i29 = 2139095039#u32)
-  let i30 ← lift (core.f32.to_bits core.f32.F32.MIN_POSITIVE)
+  let i30 ← core.f32.to_bits core.f32.F32.MIN_POSITIVE
   massert (i30 = 8388608#u32)
-  let i31 ← lift (core.f32.to_bits core.f32.F32.INFINITY)
+  let i31 ← core.f32.to_bits core.f32.F32.INFINITY
   massert (i31 = 2139095040#u32)
-  let i32 ← lift (core.f32.to_bits core.f32.F32.NEG_INFINITY)
+  let i32 ← core.f32.to_bits core.f32.F32.NEG_INFINITY
   massert (i32 = 4286578688#u32)
   massert (core.f32.F32.RADIX = 2#u32)
   massert (core.f32.F32.MANTISSA_DIGITS = 24#u32)
@@ -276,31 +264,28 @@ def test_consts32 : Result Unit := do
 #guard (test_consts32).reducesTo ()
 
 /-- [float_bits::test_bits64]:
-    Source: 'tests/src/float-bits.rs', lines 129:0-144:1
+    Source: 'tests/src/float-bits.rs', lines 130:0-144:1
     Visibility: public -/
 def test_bits64 : Result Unit := do
-  let i ← lift (core.f64.to_bits (Float.ofBits 4607182418800017408))
+  let i ← core.f64.to_bits (Float.ofBits 4607182418800017408)
   massert (i = 4607182418800017408#u64)
-  let i1 ← lift (core.f64.to_bits (Float.ofBits 9223372036854775808))
+  let i1 ← core.f64.to_bits (Float.ofBits 9223372036854775808)
   massert (i1 = 9223372036854775808#u64)
   let fl ← lift (core.f64.from_bits 4614256656552045848#u64)
   massert (fl == (Float.ofBits 4614256656552045848))
   let fl1 ← lift (core.f64.from_bits 1#u64)
-  let i2 ← lift (core.f64.to_bits fl1)
+  let i2 ← core.f64.to_bits fl1
   massert (i2 = 1#u64)
   let fl2 ← lift (core.f64.from_bits 18442240474082181120#u64)
   massert (fl2 == core.f64.F64.NEG_INFINITY)
   let fl3 ← lift (core.f64.from_bits 9221120237041090560#u64)
   let b ← lift (core.f64.is_nan fl3)
   massert b
-  let fl4 ← lift (core.f64.from_bits 9221120237041090560#u64)
-  let i3 ← lift (core.f64.to_bits fl4)
-  massert (i3 = 9221120237041090560#u64)
-  let fl5 ← lift (core.f64.from_bits 9218868437227405313#u64)
-  let b1 ← lift (core.f64.is_nan fl5)
+  let fl4 ← lift (core.f64.from_bits 9218868437227405313#u64)
+  let b1 ← lift (core.f64.is_nan fl4)
   massert b1
-  let fl6 ← div64 (Float.ofBits 0) (Float.ofBits 0)
-  let b2 ← lift (core.f64.is_nan fl6)
+  let fl5 ← div64 (Float.ofBits 0) (Float.ofBits 0)
+  let b2 ← lift (core.f64.is_nan fl5)
   massert b2
   let b3 ← lift (core.f64.is_nan (Float.ofBits 4607182418800017408))
   massert (¬ b3)
@@ -310,14 +295,14 @@ def test_bits64 : Result Unit := do
   massert b5
   let b6 ← lift (core.f64.is_infinite core.f64.F64.MAX)
   massert (¬ b6)
-  let b7 ← lift (core.f64.is_infinite fl6)
+  let b7 ← lift (core.f64.is_infinite fl5)
   massert (¬ b7)
 
 /- Unit test for [float_bits::test_bits64] -/
 #guard (test_bits64).reducesTo ()
 
 /-- [float_bits::test_classify64]:
-    Source: 'tests/src/float-bits.rs', lines 147:0-165:1
+    Source: 'tests/src/float-bits.rs', lines 147:0-164:1
     Visibility: public -/
 def test_classify64 : Result Unit := do
   let b ← lift (core.f64.is_normal (Float.ofBits 4607182418800017408))
@@ -348,25 +333,20 @@ def test_classify64 : Result Unit := do
   massert (¬ b10)
   let b11 ← lift (core.f64.is_subnormal fl)
   massert (¬ b11)
-  let b12 ← lift (core.f64.is_sign_positive (Float.ofBits 0))
+  let b12 ← core.f64.is_sign_positive (Float.ofBits 0)
   massert b12
-  let b13 ←
-    lift (core.f64.is_sign_negative (Float.ofBits 9223372036854775808))
+  let b13 ← core.f64.is_sign_negative (Float.ofBits 9223372036854775808)
   massert b13
-  let b14 ←
-    lift (core.f64.is_sign_positive (Float.ofBits 9223372036854775808))
+  let b14 ← core.f64.is_sign_positive (Float.ofBits 9223372036854775808)
   massert (¬ b14)
-  let b15 ← lift (core.f64.is_sign_negative core.f64.F64.NEG_INFINITY)
+  let b15 ← core.f64.is_sign_negative core.f64.F64.NEG_INFINITY
   massert b15
-  let fl4 ← lift (core.f64.from_bits 9221120237041090560#u64)
-  let b16 ← lift (core.f64.is_sign_positive fl4)
-  massert b16
 
 /- Unit test for [float_bits::test_classify64] -/
 #guard (test_classify64).reducesTo ()
 
 /-- [float_bits::test_sign64]:
-    Source: 'tests/src/float-bits.rs', lines 168:0-184:1
+    Source: 'tests/src/float-bits.rs', lines 167:0-182:1
     Visibility: public -/
 def test_sign64 : Result Unit := do
   let fl ← lift (core.f64.signum (Float.ofBits 4615063718147915776))
@@ -374,119 +354,114 @@ def test_sign64 : Result Unit := do
   let fl1 ← lift (core.f64.signum (Float.ofBits 13838435755002691584))
   massert (fl1 == (Float.ofBits 13830554455654793216))
   let fl2 ← lift (core.f64.signum (Float.ofBits 0))
-  let i ← lift (core.f64.to_bits fl2)
+  let i ← core.f64.to_bits fl2
   massert (i = 4607182418800017408#u64)
   let fl3 ← lift (core.f64.signum (Float.ofBits 9223372036854775808))
-  let i1 ← lift (core.f64.to_bits fl3)
+  let i1 ← core.f64.to_bits fl3
   massert (i1 = 13830554455654793216#u64)
   let fl4 ← div64 (Float.ofBits 0) (Float.ofBits 0)
   let fl5 ← lift (core.f64.signum fl4)
   let b ← lift (core.f64.is_nan fl5)
   massert b
   let fl6 ←
-    lift (core.f64.copysign (Float.ofBits 4615063718147915776)
-      (Float.ofBits 9223372036854775808))
+    core.f64.copysign (Float.ofBits 4615063718147915776)
+      (Float.ofBits 9223372036854775808)
   massert (fl6 == (Float.ofBits 13838435755002691584))
   let fl7 ←
-    lift (core.f64.copysign (Float.ofBits 0)
-      (Float.ofBits 13830554455654793216))
-  let i2 ← lift (core.f64.to_bits fl7)
+    core.f64.copysign (Float.ofBits 0) (Float.ofBits 13830554455654793216)
+  let i2 ← core.f64.to_bits fl7
   massert (i2 = 9223372036854775808#u64)
   let fl8 ←
-    lift (core.f64.copysign core.f64.F64.INFINITY
-      (Float.ofBits 13835058055282163712))
+    core.f64.copysign core.f64.F64.INFINITY (Float.ofBits 13835058055282163712)
   massert (fl8 == core.f64.F64.NEG_INFINITY)
-  let fl9 ← lift (core.f64.from_bits 9221120237041090560#u64)
-  let fl10 ← lift (core.f64.copysign (Float.ofBits 4607182418800017408) fl9)
-  massert (fl10 == (Float.ofBits 4607182418800017408))
-  let fl11 ← lift (core.f64.copysign fl4 (Float.ofBits 13830554455654793216))
-  let b1 ← lift (core.f64.is_nan fl11)
+  let fl9 ← core.f64.copysign fl4 (Float.ofBits 13830554455654793216)
+  let b1 ← lift (core.f64.is_nan fl9)
   massert b1
-  let fl12 ← lift (core.f64.recip (Float.ofBits 4611686018427387904))
-  massert (fl12 == (Float.ofBits 4602678819172646912))
-  let fl13 ← lift (core.f64.recip (Float.ofBits 4613937818241073152))
-  massert (fl13 == (Float.ofBits 4599676419421066581))
-  let fl14 ← lift (core.f64.recip (Float.ofBits 9223372036854775808))
-  massert (fl14 == core.f64.F64.NEG_INFINITY)
-  let fl15 ← lift (core.f64.recip core.f64.F64.MAX)
-  let b2 ← lift (core.f64.is_subnormal fl15)
+  let fl10 ← lift (core.f64.recip (Float.ofBits 4611686018427387904))
+  massert (fl10 == (Float.ofBits 4602678819172646912))
+  let fl11 ← lift (core.f64.recip (Float.ofBits 4613937818241073152))
+  massert (fl11 == (Float.ofBits 4599676419421066581))
+  let fl12 ← lift (core.f64.recip (Float.ofBits 9223372036854775808))
+  massert (fl12 == core.f64.F64.NEG_INFINITY)
+  let fl13 ← lift (core.f64.recip core.f64.F64.MAX)
+  let b2 ← lift (core.f64.is_subnormal fl13)
   massert b2
-  let fl16 ← lift (core.f64.recip fl4)
-  let b3 ← lift (core.f64.is_nan fl16)
+  let fl14 ← lift (core.f64.recip fl4)
+  let b3 ← lift (core.f64.is_nan fl14)
   massert b3
 
 /- Unit test for [float_bits::test_sign64] -/
 #guard (test_sign64).reducesTo ()
 
 /-- [float_bits::test_consts64]:
-    Source: 'tests/src/float-bits.rs', lines 187:0-231:1
+    Source: 'tests/src/float-bits.rs', lines 185:0-229:1
     Visibility: public -/
 def test_consts64 : Result Unit := do
-  let i ← lift (core.f64.to_bits core.f64.consts.PI)
+  let i ← core.f64.to_bits core.f64.consts.PI
   massert (i = 4614256656552045848#u64)
-  let i1 ← lift (core.f64.to_bits core.f64.consts.TAU)
+  let i1 ← core.f64.to_bits core.f64.consts.TAU
   massert (i1 = 4618760256179416344#u64)
-  let i2 ← lift (core.f64.to_bits core.f64.consts.GOLDEN_RATIO)
+  let i2 ← core.f64.to_bits core.f64.consts.GOLDEN_RATIO
   massert (i2 = 4609965796441453736#u64)
-  let i3 ← lift (core.f64.to_bits core.f64.consts.EULER_GAMMA)
+  let i3 ← core.f64.to_bits core.f64.consts.EULER_GAMMA
   massert (i3 = 4603374316052002329#u64)
-  let i4 ← lift (core.f64.to_bits core.f64.consts.FRAC_PI_2)
+  let i4 ← core.f64.to_bits core.f64.consts.FRAC_PI_2
   massert (i4 = 4609753056924675352#u64)
-  let i5 ← lift (core.f64.to_bits core.f64.consts.FRAC_PI_3)
+  let i5 ← core.f64.to_bits core.f64.consts.FRAC_PI_3
   massert (i5 = 4607394977673999206#u64)
-  let i6 ← lift (core.f64.to_bits core.f64.consts.FRAC_PI_4)
+  let i6 ← core.f64.to_bits core.f64.consts.FRAC_PI_4
   massert (i6 = 4605249457297304856#u64)
-  let i7 ← lift (core.f64.to_bits core.f64.consts.FRAC_PI_6)
+  let i7 ← core.f64.to_bits core.f64.consts.FRAC_PI_6
   massert (i7 = 4602891378046628710#u64)
-  let i8 ← lift (core.f64.to_bits core.f64.consts.FRAC_PI_8)
+  let i8 ← core.f64.to_bits core.f64.consts.FRAC_PI_8
   massert (i8 = 4600745857669934360#u64)
-  let i9 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_PI)
+  let i9 ← core.f64.to_bits core.f64.consts.FRAC_1_PI
   massert (i9 = 4599405781057128579#u64)
-  let i10 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_SQRT_PI)
+  let i10 ← core.f64.to_bits core.f64.consts.FRAC_1_SQRT_PI
   massert (i10 = 4603256987541740397#u64)
-  let i11 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_SQRT_2PI)
+  let i11 ← core.f64.to_bits core.f64.consts.FRAC_1_SQRT_2PI
   massert (i11 = 4600858325139338833#u64)
-  let i12 ← lift (core.f64.to_bits core.f64.consts.FRAC_2_PI)
+  let i12 ← core.f64.to_bits core.f64.consts.FRAC_2_PI
   massert (i12 = 4603909380684499075#u64)
-  let i13 ← lift (core.f64.to_bits core.f64.consts.FRAC_2_SQRT_PI)
+  let i13 ← core.f64.to_bits core.f64.consts.FRAC_2_SQRT_PI
   massert (i13 = 4607760587169110893#u64)
-  let i14 ← lift (core.f64.to_bits core.f64.consts.SQRT_2)
+  let i14 ← core.f64.to_bits core.f64.consts.SQRT_2
   massert (i14 = 4609047870845172685#u64)
-  let i15 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_SQRT_2)
+  let i15 ← core.f64.to_bits core.f64.consts.FRAC_1_SQRT_2
   massert (i15 = 4604544271217802189#u64)
-  let i16 ← lift (core.f64.to_bits core.f64.consts.SQRT_3)
+  let i16 ← core.f64.to_bits core.f64.consts.SQRT_3
   massert (i16 = 4610479282544200874#u64)
-  let i17 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_SQRT_3)
+  let i17 ← core.f64.to_bits core.f64.consts.FRAC_1_SQRT_3
   massert (i17 = 4603375528459645724#u64)
-  let i18 ← lift (core.f64.to_bits core.f64.consts.SQRT_5)
+  let i18 ← core.f64.to_bits core.f64.consts.SQRT_5
   massert (i18 = 4612217596255138984#u64)
-  let i19 ← lift (core.f64.to_bits core.f64.consts.FRAC_1_SQRT_5)
+  let i19 ← core.f64.to_bits core.f64.consts.FRAC_1_SQRT_5
   massert (i19 = 4601727903846100441#u64)
-  let i20 ← lift (core.f64.to_bits core.f64.consts.E)
+  let i20 ← core.f64.to_bits core.f64.consts.E
   massert (i20 = 4613303445314885481#u64)
-  let i21 ← lift (core.f64.to_bits core.f64.consts.LOG2_E)
+  let i21 ← core.f64.to_bits core.f64.consts.LOG2_E
   massert (i21 = 4609176140021203710#u64)
-  let i22 ← lift (core.f64.to_bits core.f64.consts.LOG2_10)
+  let i22 ← core.f64.to_bits core.f64.consts.LOG2_10
   massert (i22 = 4614662735865160561#u64)
-  let i23 ← lift (core.f64.to_bits core.f64.consts.LOG10_E)
+  let i23 ← core.f64.to_bits core.f64.consts.LOG10_E
   massert (i23 = 4601495173785380110#u64)
-  let i24 ← lift (core.f64.to_bits core.f64.consts.LOG10_2)
+  let i24 ← core.f64.to_bits core.f64.consts.LOG10_2
   massert (i24 = 4599094494223104511#u64)
-  let i25 ← lift (core.f64.to_bits core.f64.consts.LN_2)
+  let i25 ← core.f64.to_bits core.f64.consts.LN_2
   massert (i25 = 4604418534313441775#u64)
-  let i26 ← lift (core.f64.to_bits core.f64.consts.LN_10)
+  let i26 ← core.f64.to_bits core.f64.consts.LN_10
   massert (i26 = 4612367379483415830#u64)
-  let i27 ← lift (core.f64.to_bits core.f64.F64.EPSILON)
+  let i27 ← core.f64.to_bits core.f64.F64.EPSILON
   massert (i27 = 4372995238176751616#u64)
-  let i28 ← lift (core.f64.to_bits core.f64.F64.MIN)
+  let i28 ← core.f64.to_bits core.f64.F64.MIN
   massert (i28 = 18442240474082181119#u64)
-  let i29 ← lift (core.f64.to_bits core.f64.F64.MAX)
+  let i29 ← core.f64.to_bits core.f64.F64.MAX
   massert (i29 = 9218868437227405311#u64)
-  let i30 ← lift (core.f64.to_bits core.f64.F64.MIN_POSITIVE)
+  let i30 ← core.f64.to_bits core.f64.F64.MIN_POSITIVE
   massert (i30 = 4503599627370496#u64)
-  let i31 ← lift (core.f64.to_bits core.f64.F64.INFINITY)
+  let i31 ← core.f64.to_bits core.f64.F64.INFINITY
   massert (i31 = 9218868437227405312#u64)
-  let i32 ← lift (core.f64.to_bits core.f64.F64.NEG_INFINITY)
+  let i32 ← core.f64.to_bits core.f64.F64.NEG_INFINITY
   massert (i32 = 18442240474082181120#u64)
   massert (core.f64.F64.RADIX = 2#u32)
   massert (core.f64.F64.MANTISSA_DIGITS = 53#u32)
@@ -504,31 +479,71 @@ def test_consts64 : Result Unit := do
 /- Unit test for [float_bits::test_consts64] -/
 #guard (test_consts64).reducesTo ()
 
+/-- [float_bits::nan_observers32]:
+    Source: 'tests/src/float-bits.rs', lines 233:0-239:1
+    Visibility: public -/
+def nan_observers32 : Result Unit := do
+  let fl ← lift (core.f32.from_bits 2143289344#u32)
+  let i ← core.f32.to_bits fl
+  massert (i = 2143289344#u32)
+  let fl1 ← lift (core.f32.from_bits 2143289344#u32)
+  let b ← core.f32.is_sign_positive fl1
+  massert b
+  let fl2 ← lift (core.f32.from_bits 4290772992#u32)
+  let b1 ← core.f32.is_sign_negative fl2
+  massert b1
+  let fl3 ← lift (core.f32.from_bits 2143289344#u32)
+  let fl4 ← core.f32.copysign (Float32.ofBits 1065353216) fl3
+  massert (fl4 == (Float32.ofBits 1065353216))
+  let fl5 ← lift (core.f32.from_bits 4290772992#u32)
+  let fl6 ← core.f32.copysign (Float32.ofBits 1065353216) fl5
+  massert (fl6 == (Float32.ofBits 3212836864))
+
+/-- [float_bits::nan_observers64]:
+    Source: 'tests/src/float-bits.rs', lines 242:0-248:1
+    Visibility: public -/
+def nan_observers64 : Result Unit := do
+  let fl ← lift (core.f64.from_bits 9221120237041090560#u64)
+  let i ← core.f64.to_bits fl
+  massert (i = 9221120237041090560#u64)
+  let fl1 ← lift (core.f64.from_bits 9221120237041090560#u64)
+  let b ← core.f64.is_sign_positive fl1
+  massert b
+  let fl2 ← lift (core.f64.from_bits 18444492273895866368#u64)
+  let b1 ← core.f64.is_sign_negative fl2
+  massert b1
+  let fl3 ← lift (core.f64.from_bits 9221120237041090560#u64)
+  let fl4 ← core.f64.copysign (Float.ofBits 4607182418800017408) fl3
+  massert (fl4 == (Float.ofBits 4607182418800017408))
+  let fl5 ← lift (core.f64.from_bits 18444492273895866368#u64)
+  let fl6 ← core.f64.copysign (Float.ofBits 4607182418800017408) fl5
+  massert (fl6 == (Float.ofBits 13830554455654793216))
+
 /-- [float_bits::test_legacy_consts]:
-    Source: 'tests/src/float-bits.rs', lines 236:0-246:1
+    Source: 'tests/src/float-bits.rs', lines 253:0-263:1
     Visibility: public -/
 def test_legacy_consts : Result Unit := do
-  let i ← lift (core.f32.to_bits core.f32.EPSILON)
-  let i1 ← lift (core.f32.to_bits core.f32.F32.EPSILON)
+  let i ← core.f32.to_bits core.f32.EPSILON
+  let i1 ← core.f32.to_bits core.f32.F32.EPSILON
   massert (i = i1)
-  let i2 ← lift (core.f32.to_bits core.f32.MAX)
-  let i3 ← lift (core.f32.to_bits core.f32.F32.MAX)
+  let i2 ← core.f32.to_bits core.f32.MAX
+  let i3 ← core.f32.to_bits core.f32.F32.MAX
   massert (i2 = i3)
-  let i4 ← lift (core.f32.to_bits core.f32.MIN_POSITIVE)
-  let i5 ← lift (core.f32.to_bits core.f32.F32.MIN_POSITIVE)
+  let i4 ← core.f32.to_bits core.f32.MIN_POSITIVE
+  let i5 ← core.f32.to_bits core.f32.F32.MIN_POSITIVE
   massert (i4 = i5)
-  let i6 ← lift (core.f32.to_bits core.f32.NEG_INFINITY)
-  let i7 ← lift (core.f32.to_bits core.f32.F32.NEG_INFINITY)
+  let i6 ← core.f32.to_bits core.f32.NEG_INFINITY
+  let i7 ← core.f32.to_bits core.f32.F32.NEG_INFINITY
   massert (i6 = i7)
   massert (core.f32.MANTISSA_DIGITS = 24#u32)
-  let i8 ← lift (core.f64.to_bits core.f64.EPSILON)
-  let i9 ← lift (core.f64.to_bits core.f64.F64.EPSILON)
+  let i8 ← core.f64.to_bits core.f64.EPSILON
+  let i9 ← core.f64.to_bits core.f64.F64.EPSILON
   massert (i8 = i9)
-  let i10 ← lift (core.f64.to_bits core.f64.MIN)
-  let i11 ← lift (core.f64.to_bits core.f64.F64.MIN)
+  let i10 ← core.f64.to_bits core.f64.MIN
+  let i11 ← core.f64.to_bits core.f64.F64.MIN
   massert (i10 = i11)
-  let i12 ← lift (core.f64.to_bits core.f64.INFINITY)
-  let i13 ← lift (core.f64.to_bits core.f64.F64.INFINITY)
+  let i12 ← core.f64.to_bits core.f64.INFINITY
+  let i13 ← core.f64.to_bits core.f64.F64.INFINITY
   massert (i12 = i13)
   massert (core.f64.MIN_EXP = (-1021)#i32)
 
