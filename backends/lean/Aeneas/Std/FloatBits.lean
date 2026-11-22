@@ -50,14 +50,16 @@ open Result WP
 
 /-! ## binary64 (`f64`) -/
 
-/-- The bits of an `f64`. Only meaningful for a non-NaN `x` (pure helper; see `to_bits`). -/
+/-- The bits of an `f64` (pure helper, not a Rust function; see `to_bits`). On a NaN this uses
+the canonical NaN's bits, which need not be Rust's. -/
 @[expose] def core.f64.bitsOf (x : Float) : U64 := ⟨x.toBits.toBitVec⟩
 
-/-- The sign bit of an `f64`. Only meaningful for a non-NaN `x` (pure helper). -/
+/-- The sign bit of an `f64` (pure helper, not a Rust function; see `is_sign_negative`). On a
+NaN this uses the canonical NaN's sign (positive), which need not be Rust's. -/
 @[expose] def core.f64.signBit (x : Float) : Bool := x.toBits >>> 63 == 1
 
 /-- The magnitude of `x` with the sign bit of `sign`, at the bit level (pure helper; see
-`copysign`). -/
+`copysign`). When `sign` is a NaN, the canonical NaN's (positive) sign is used. -/
 @[expose] def core.f64.copysignBits (x sign : Float) : Float :=
   Float.ofBits ((x.toBits &&& 0x7FFFFFFFFFFFFFFF) ||| (sign.toBits &&& 0x8000000000000000))
 
@@ -146,14 +148,16 @@ theorem core.f64.copysign_nan (x sign : Float) (h : sign.isNaN = true) :
 
 /-! ## binary32 (`f32`) -/
 
-/-- The bits of an `f32`. Only meaningful for a non-NaN `x` (pure helper; see `to_bits`). -/
+/-- The bits of an `f32` (pure helper, not a Rust function; see `to_bits`). On a NaN this uses
+the canonical NaN's bits, which need not be Rust's. -/
 @[expose] def core.f32.bitsOf (x : Float32) : U32 := ⟨x.toBits.toBitVec⟩
 
-/-- The sign bit of an `f32`. Only meaningful for a non-NaN `x` (pure helper). -/
+/-- The sign bit of an `f32` (pure helper, not a Rust function; see `is_sign_negative`). On a
+NaN this uses the canonical NaN's sign (positive), which need not be Rust's. -/
 @[expose] def core.f32.signBit (x : Float32) : Bool := x.toBits >>> 31 == 1
 
 /-- The magnitude of `x` with the sign bit of `sign`, at the bit level (pure helper; see
-`copysign`). -/
+`copysign`). When `sign` is a NaN, the canonical NaN's (positive) sign is used. -/
 @[expose] def core.f32.copysignBits (x sign : Float32) : Float32 :=
   Float32.ofBits ((x.toBits &&& 0x7FFFFFFF) ||| (sign.toBits &&& 0x80000000))
 

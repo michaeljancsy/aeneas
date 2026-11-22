@@ -1,11 +1,13 @@
 import Aeneas
+import FloatBits
 
 set_option autoImplicit false
 
 /-! Checks of the float bit, classification and sign models (`Aeneas.Std.FloatBits`) and of the
 float constants (`Aeneas.Std.FloatConsts`) against Rust. Every expected value below was printed by
 a Rust program (`to_bits` of Rust's own constants and method results). The checks are evaluated
-by the kernel (`rfl`, `decide`), so they test Lean's logical model, not compiled code. -/
+by the kernel (`rfl`, `decide`), so they test Lean's logical model, not compiled code. The last
+section also checks compiled code with `#guard`. -/
 
 open Aeneas.Std
 
@@ -375,7 +377,8 @@ example : core.f64.copysign (Float.ofBits 0x400C000000000000) (Float.ofBits 0x80
 
 Compiled code runs the same definitions, so it also fails on a NaN. -/
 
-/-- `r` fails with `undef`. -/
+/-- `r` fails with `undef`. Matches on the `Result` representation to check the error kind,
+which `Option.ofResult` cannot. -/
 def failsUndef {α : Type} (r : Result α) : Bool :=
   match r.match with
   | .vis (.fail .undef) _ => true
@@ -393,5 +396,10 @@ def failsUndef {α : Type} (r : Result α) : Bool :=
 #guard (core.f64.is_sign_negative (-0)).reducesTo true
 #guard (core.f32.is_sign_positive (-1)).reducesTo false
 #guard (core.f64.copysign 3.5 (-0)).reducesTo (-3.5)
-#guard ((core.f32.copysign (0 / 0) (-1)).reducesTo (0 / 0)) == false
 #guard (Option.ofResult (core.f32.copysign (0 / 0) (-1))).map Float32.isNaN == some true
+
+/-! The translated Rust functions that read a NaN's sign or bits (`tests/src/float-bits.rs`)
+fail in the model; natively, Rust runs them without failing. -/
+
+#guard failsUndef float_bits.nan_observers32
+#guard failsUndef float_bits.nan_observers64

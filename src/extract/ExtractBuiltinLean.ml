@@ -802,69 +802,69 @@ let lean_builtin_funs =
     mk_fun "core::f32::{f32}::abs" "core.f32.abs" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 189 *)
     mk_fun "core::f32::{f32}::clamp" "core.f32.clamp";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 198 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 202 *)
     mk_fun "core::f32::{f32}::copysign" "core.f32.copysign";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 165 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 169 *)
     mk_fun "core::f32::{f32}::from_bits" "core.f32.from_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 52 *)
     mk_fun "core::f32::{f32}::is_finite" "core.f32.is_finite" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 171 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 175 *)
     mk_fun "core::f32::{f32}::is_infinite" "core.f32.is_infinite"
       ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 168 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 172 *)
     mk_fun "core::f32::{f32}::is_nan" "core.f32.is_nan" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 185 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 189 *)
     mk_fun "core::f32::{f32}::is_normal" "core.f32.is_normal" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 175 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 179 *)
     mk_fun "core::f32::{f32}::is_sign_negative" "core.f32.is_sign_negative";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 180 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 184 *)
     mk_fun "core::f32::{f32}::is_sign_positive" "core.f32.is_sign_positive";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 191 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 195 *)
     mk_fun "core::f32::{f32}::is_subnormal" "core.f32.is_subnormal"
       ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 184 *)
     mk_fun "core::f32::{f32}::max" "core.f32.max" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 179 *)
     mk_fun "core::f32::{f32}::min" "core.f32.min" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 208 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 212 *)
     mk_fun "core::f32::{f32}::recip" "core.f32.recip" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 203 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 207 *)
     mk_fun "core::f32::{f32}::signum" "core.f32.signum" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 161 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 165 *)
     mk_fun "core::f32::{f32}::to_bits" "core.f32.to_bits";
     (* file: "Aeneas/Std/Float.lean", line: 21 *)
     mk_fun "core::f64::{f64}::abs" "core.f64.abs" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 142 *)
     mk_fun "core::f64::{f64}::clamp" "core.f64.clamp";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 102 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 104 *)
     mk_fun "core::f64::{f64}::copysign" "core.f64.copysign";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 69 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 71 *)
     mk_fun "core::f64::{f64}::from_bits" "core.f64.from_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 18 *)
     mk_fun "core::f64::{f64}::is_finite" "core.f64.is_finite" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 75 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 77 *)
     mk_fun "core::f64::{f64}::is_infinite" "core.f64.is_infinite"
       ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 72 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 74 *)
     mk_fun "core::f64::{f64}::is_nan" "core.f64.is_nan" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 89 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 91 *)
     mk_fun "core::f64::{f64}::is_normal" "core.f64.is_normal" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 79 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 81 *)
     mk_fun "core::f64::{f64}::is_sign_negative" "core.f64.is_sign_negative";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 84 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 86 *)
     mk_fun "core::f64::{f64}::is_sign_positive" "core.f64.is_sign_positive";
-    (* file: "Aeneas/Std/FloatBits.lean", line: 95 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 97 *)
     mk_fun "core::f64::{f64}::is_subnormal" "core.f64.is_subnormal"
       ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 137 *)
     mk_fun "core::f64::{f64}::max" "core.f64.max" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 132 *)
     mk_fun "core::f64::{f64}::min" "core.f64.min" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 112 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 114 *)
     mk_fun "core::f64::{f64}::recip" "core.f64.recip" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 107 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 109 *)
     mk_fun "core::f64::{f64}::signum" "core.f64.signum" ~can_fail:false;
-    (* file: "Aeneas/Std/FloatBits.lean", line: 65 *)
+    (* file: "Aeneas/Std/FloatBits.lean", line: 67 *)
     mk_fun "core::f64::{f64}::to_bits" "core.f64.to_bits";
     (* file: "Aeneas/Std/Scalar/Display.lean", line: 58 *)
     mk_fun "core::fmt::num::imp::{core::fmt::Display<i128>}::fmt"
