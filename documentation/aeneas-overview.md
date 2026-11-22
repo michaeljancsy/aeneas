@@ -282,7 +282,8 @@ These never fail, except `clamp`. NaN payloads are not modelled.
 **Bits, classification, sign and constants.** `to_bits`, `from_bits`, `is_nan`,
 `is_infinite`, `is_sign_positive`, `is_sign_negative`, `is_normal`, `is_subnormal`,
 `signum`, `copysign` and `recip` have Lean models for `f32` and `f64`
-(`Aeneas/Std/FloatBits.lean`, for example `core.f32.to_bits`, which returns a `U32`).
+(`Aeneas/Std/FloatBits.lean`, for example `core.f32.to_bits`, which returns a
+`Result U32`).
 The standard constants are definitions, not axioms (`Aeneas/Std/FloatConsts.lean`):
 `EPSILON`, `MIN`, `MAX`, `MIN_POSITIVE`, `INFINITY`, `NEG_INFINITY`, `RADIX`,
 `MANTISSA_DIGITS`, `DIGITS`, `MIN_EXP`, `MAX_EXP`, `MIN_10_EXP` and `MAX_10_EXP` (as
@@ -291,13 +292,12 @@ The standard constants are definitions, not axioms (`Aeneas/Std/FloatConsts.lean
 `core.f32.consts.PI` and so on; some, such as `GOLDEN_RATIO`, are unstable in Rust and
 need `more_float_constants`). Each float constant is Rust's exact bit pattern.
 `NAN` is not modelled. Lean's float model has a single NaN, positive with the canonical
-payload (`0x7FC00000`, `0x7FF8000000000000`), so on NaNs these models differ from Rust:
-`to_bits` returns the canonical bits, `from_bits` canonicalises, `is_sign_negative` is
-`false`, `copysign` with a NaN magnitude returns the canonical NaN, `copysign(x, y)`
-with a NaN `y` takes the canonical NaN's positive sign, and `recip` of a NaN is the
-canonical NaN. `signum` of a NaN is the canonical NaN, as in Rust. Proofs about NaN bit
-patterns or NaN signs can therefore disagree with compiled Rust; for other inputs the
-models match Rust exactly.
+payload (`0x7FC00000`, `0x7FF8000000000000`). Rust keeps a NaN's sign and payload, so
+reading them fails in the model (`fail .undef`): `to_bits`, `is_sign_negative` and
+`is_sign_positive` of a NaN, and `copysign(x, y)` with a NaN `y`. A proof that a function
+returns `ok` therefore shows it never reads a NaN's sign or bits. `from_bits` of a NaN
+pattern, `copysign` with a NaN magnitude, `signum` and `recip` of a NaN all give Lean's
+single NaN. On non-NaN inputs the models match Rust exactly.
 
 Not yet supported:
 - NaN literals;

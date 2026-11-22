@@ -4,7 +4,11 @@
 #![feature(more_float_constants)]
 //! Float bits, classification, sign and the standard constants. The constants and methods
 //! are modelled in the Lean standard library (no axioms). NaN payloads and signs are not
-//! modelled (Lean has a single NaN), so the tests only use NaN where Rust and the model agree.
+//! modelled (Lean has a single NaN): reading a NaN's sign or bits (`to_bits`,
+//! `is_sign_negative`, `is_sign_positive`, and `copysign` with a NaN sign) fails in the model.
+//! So the `#[verify::test]` functions only use NaN where Rust and the model agree, and the
+//! calls that read a NaN's sign or bits are in `nan_observers32`/`nan_observers64`, which are
+//! translated but only run natively.
 
 pub fn div32(x: f32, y: f32) -> f32 {
     x / y
@@ -21,7 +25,6 @@ pub fn test_bits32() {
     assert!(f32::from_bits(1).to_bits() == 1);
     assert!(f32::from_bits(0xff80_0000) == f32::NEG_INFINITY);
     assert!(f32::from_bits(0x7fc0_0000).is_nan());
-    assert!(f32::from_bits(0x7fc0_0000).to_bits() == 0x7fc0_0000);
     assert!(f32::from_bits(0x7f80_0001).is_nan());
     assert!(div32(0.0, 0.0).is_nan());
     assert!(!1.0f32.is_nan());
@@ -51,7 +54,6 @@ pub fn test_classify32() {
     assert!(!(-0.0f32).is_sign_positive());
     assert!(f32::NEG_INFINITY.is_sign_negative());
     assert!(f32::INFINITY.is_sign_positive());
-    assert!(f32::from_bits(0x7fc0_0000).is_sign_positive());
 }
 
 #[verify::test]
@@ -66,7 +68,6 @@ pub fn test_sign32() {
     assert!((-3.5f32).copysign(1.0) == 3.5);
     assert!(0.0f32.copysign(-1.0).to_bits() == 0x8000_0000);
     assert!(f32::INFINITY.copysign(-2.0) == f32::NEG_INFINITY);
-    assert!(1.0f32.copysign(f32::from_bits(0x7fc0_0000)) == 1.0);
     assert!(div32(0.0, 0.0).copysign(-1.0).is_nan());
     assert!(2.0f32.recip() == 0.5);
     assert!(3.0f32.recip() == 0.333333343);
@@ -133,7 +134,6 @@ pub fn test_bits64() {
     assert!(f64::from_bits(1).to_bits() == 1);
     assert!(f64::from_bits(0xfff0_0000_0000_0000) == f64::NEG_INFINITY);
     assert!(f64::from_bits(0x7ff8_0000_0000_0000).is_nan());
-    assert!(f64::from_bits(0x7ff8_0000_0000_0000).to_bits() == 0x7ff8_0000_0000_0000);
     assert!(f64::from_bits(0x7ff0_0000_0000_0001).is_nan());
     assert!(div64(0.0, 0.0).is_nan());
     assert!(!1.0f64.is_nan());
@@ -161,7 +161,6 @@ pub fn test_classify64() {
     assert!((-0.0f64).is_sign_negative());
     assert!(!(-0.0f64).is_sign_positive());
     assert!(f64::NEG_INFINITY.is_sign_negative());
-    assert!(f64::from_bits(0x7ff8_0000_0000_0000).is_sign_positive());
 }
 
 #[verify::test]
@@ -174,7 +173,6 @@ pub fn test_sign64() {
     assert!(3.5f64.copysign(-0.0) == -3.5);
     assert!(0.0f64.copysign(-1.0).to_bits() == 0x8000_0000_0000_0000);
     assert!(f64::INFINITY.copysign(-2.0) == f64::NEG_INFINITY);
-    assert!(1.0f64.copysign(f64::from_bits(0x7ff8_0000_0000_0000)) == 1.0);
     assert!(div64(0.0, 0.0).copysign(-1.0).is_nan());
     assert!(2.0f64.recip() == 0.5);
     assert!(3.0f64.recip() == 0.3333333333333333);
@@ -230,6 +228,25 @@ pub fn test_consts64() {
     assert!(1.0f64 + f64::EPSILON / 2.0 == 1.0);
 }
 
+/// Reading a NaN's sign or bits. Rust gives these results; the model fails (`undef`), so these
+/// functions are translated but are not `#[verify::test]`s.
+pub fn nan_observers32() {
+    assert!(f32::from_bits(0x7fc0_0000).to_bits() == 0x7fc0_0000);
+    assert!(f32::from_bits(0x7fc0_0000).is_sign_positive());
+    assert!(f32::from_bits(0xffc0_0000).is_sign_negative());
+    assert!(1.0f32.copysign(f32::from_bits(0x7fc0_0000)) == 1.0);
+    assert!(1.0f32.copysign(f32::from_bits(0xffc0_0000)) == -1.0);
+}
+
+/// See `nan_observers32`.
+pub fn nan_observers64() {
+    assert!(f64::from_bits(0x7ff8_0000_0000_0000).to_bits() == 0x7ff8_0000_0000_0000);
+    assert!(f64::from_bits(0x7ff8_0000_0000_0000).is_sign_positive());
+    assert!(f64::from_bits(0xfff8_0000_0000_0000).is_sign_negative());
+    assert!(1.0f64.copysign(f64::from_bits(0x7ff8_0000_0000_0000)) == 1.0);
+    assert!(1.0f64.copysign(f64::from_bits(0xfff8_0000_0000_0000)) == -1.0);
+}
+
 /// The legacy module-level constants are the associated ones.
 #[allow(deprecated, deprecated_in_future)]
 #[verify::test]
@@ -260,5 +277,7 @@ mod tests {
         test_sign64();
         test_consts64();
         test_legacy_consts();
+        nan_observers32();
+        nan_observers64();
     }
 }
