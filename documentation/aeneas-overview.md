@@ -239,16 +239,16 @@ and `>=` are false when either side is NaN. Float literals are emitted as exact 
 patterns, for example `Float32.ofBits 1036831949` for `0.1f32`.
 
 Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy`,
-`PartialEq`, `PartialOrd` and `Default` have Lean models. Other float methods, traits
-and constants (for example `max`, `floor`, `to_bits` and `f32::EPSILON`) are extracted
-as axioms or not supported; write constants as literals.
+`PartialEq`, `PartialOrd` and `Default` have Lean models, plus the methods listed below.
+Other float methods, traits and constants (for example `exp`, `to_bits` and
+`f32::EPSILON`) are extracted as axioms or not supported; write constants as literals.
 
 `PartialOrd` (in `Aeneas/Std/FloatOrd.lean`) is used by method calls such as
-`x.partial_cmp(&y)`, by generic code and by `#[derive(PartialOrd)]`: `partial_cmp` is `none` when either side is NaN and treats
-`-0.0` and `0.0` as equal, and `lt`, `le`, `gt` and `ge` are false when either side is
-NaN. The definitions go through Lean's logical float model (`Float.toModel`), and
-lemmas relate them to Lean's `<` and `≤`. `Default` is `+0.0`, so
-`#[derive(Default)]` works on types with float fields.
+`x.partial_cmp(&y)`, by generic code and by `#[derive(PartialOrd)]`: `partial_cmp` is
+`none` when either side is NaN and treats `-0.0` and `0.0` as equal, and `lt`, `le`,
+`gt` and `ge` are false when either side is NaN. The definitions go through Lean's
+logical float model (`Float.toModel`), and lemmas relate them to Lean's `<` and `≤`.
+`Default` is `+0.0`, so `#[derive(Default)]` works on types with float fields.
 
 Casts (`as`) follow Rust and never fail. Float to integer rounds toward zero, sends NaN
 to `0`, and saturates at the integer type's bounds. Integer to float, and `f64` to `f32`,
@@ -264,6 +264,20 @@ it is zero. It is NaN if `x` is infinite, `y` is zero, or either is NaN, and it 
 if `y` is infinite and `x` is finite. It never fails. It is translated to `Float.rem`
 and `Float32.rem` (in `Aeneas/Std/FloatRem.lean`), defined through Lean's logical
 float model; Lean has no native `fmod`, so compiled code also runs that definition.
+
+Rounding, `min`/`max`, `clamp` and `mul_add` (both `f32` and `f64`) have Lean models
+(in `Aeneas/Std/FloatRound.lean`) built on Lean's logical float model, with Rust's
+semantics:
+- `floor`, `ceil`, `trunc`, `round` (ties away from zero) and `round_ties_even` keep
+  NaN, infinities, zeros and integers unchanged, and a zero result keeps the input's
+  sign (`(-0.5f64).ceil()` is `-0.0`); `fract(x)` is `x - x.trunc()`;
+- `min` and `max` return the other argument when exactly one is NaN. For zeros of
+  opposite signs Rust may return either one, so the models leave the choice unknown to
+  proofs (an `opaque` constant; compiled code returns the second argument);
+- `clamp(lo, hi)` fails (an assertion failure, as for integers) unless `lo <= hi`, so
+  also when a bound is NaN;
+- `mul_add` is a fused multiply-add with a single rounding (`Float.fma`).
+These never fail, except `clamp`. NaN payloads are not modelled.
 
 Not yet supported:
 - NaN literals;

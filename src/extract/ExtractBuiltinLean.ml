@@ -528,12 +528,24 @@ let lean_builtin_funs =
       "core.default.DefaultF64.default";
     (* file: "Aeneas/Std/Float.lean", line: 55 *)
     mk_fun "core::f32::{f32}::abs" "core.f32.abs" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 189 *)
+    mk_fun "core::f32::{f32}::clamp" "core.f32.clamp";
     (* file: "Aeneas/Std/Float.lean", line: 52 *)
     mk_fun "core::f32::{f32}::is_finite" "core.f32.is_finite" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 184 *)
+    mk_fun "core::f32::{f32}::max" "core.f32.max" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 179 *)
+    mk_fun "core::f32::{f32}::min" "core.f32.min" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 21 *)
     mk_fun "core::f64::{f64}::abs" "core.f64.abs" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 142 *)
+    mk_fun "core::f64::{f64}::clamp" "core.f64.clamp";
     (* file: "Aeneas/Std/Float.lean", line: 18 *)
     mk_fun "core::f64::{f64}::is_finite" "core.f64.is_finite" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 137 *)
+    mk_fun "core::f64::{f64}::max" "core.f64.max" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 132 *)
+    mk_fun "core::f64::{f64}::min" "core.f64.min" ~can_fail:false;
     (* file: "Aeneas/Std/Scalar/Display.lean", line: 58 *)
     mk_fun "core::fmt::num::imp::{core::fmt::Display<i128>}::fmt"
       "core.fmt.num.imp.DisplayI128.fmt";
@@ -1376,10 +1388,40 @@ let lean_builtin_funs =
       "core.str.iter.IteratorChars.next";
     (* file: "Aeneas/Std/StringIter.lean", line: 31 *)
     mk_fun "core::str::{str}::chars" "core.str.Str.chars";
+    (* file: "Aeneas/Std/FloatRound.lean", line: 159 *)
+    mk_fun "std::f32::{f32}::ceil" "std.f32.ceil" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 155 *)
+    mk_fun "std::f32::{f32}::floor" "std.f32.floor" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 175 *)
+    mk_fun "std::f32::{f32}::fract" "std.f32.fract" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 196 *)
+    mk_fun "std::f32::{f32}::mul_add" "std.f32.mul_add" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 167 *)
+    mk_fun "std::f32::{f32}::round" "std.f32.round" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 171 *)
+    mk_fun "std::f32::{f32}::round_ties_even" "std.f32.round_ties_even"
+      ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 58 *)
     mk_fun "std::f32::{f32}::sqrt" "std.f32.sqrt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 163 *)
+    mk_fun "std::f32::{f32}::trunc" "std.f32.trunc" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 112 *)
+    mk_fun "std::f64::{f64}::ceil" "std.f64.ceil" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 108 *)
+    mk_fun "std::f64::{f64}::floor" "std.f64.floor" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 128 *)
+    mk_fun "std::f64::{f64}::fract" "std.f64.fract" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 149 *)
+    mk_fun "std::f64::{f64}::mul_add" "std.f64.mul_add" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 120 *)
+    mk_fun "std::f64::{f64}::round" "std.f64.round" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 124 *)
+    mk_fun "std::f64::{f64}::round_ties_even" "std.f64.round_ties_even"
+      ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 24 *)
     mk_fun "std::f64::{f64}::sqrt" "std.f64.sqrt" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatRound.lean", line: 116 *)
+    mk_fun "std::f64::{f64}::trunc" "std.f64.trunc" ~can_fail:false;
     (* file: "Aeneas/Std/Std/Io.lean", line: 7 *)
     mk_fun "std::io::stdio::_print" "std.io.stdio._print";
   ]
