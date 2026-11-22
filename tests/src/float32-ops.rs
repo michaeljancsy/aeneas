@@ -62,8 +62,8 @@ pub fn max_finite() -> f32 {
 pub fn rounding_worst_case() -> f32 {
     1.00337183e-28
 }
-// Written as literals: Rust's `f32::MIN_POSITIVE` and `f32::EPSILON` constants have no
-// Lean model and would extract as axioms.
+// Written as literals (the constants `f32::MIN_POSITIVE` and `f32::EPSILON` themselves
+// are tested in `float-bits.rs`).
 pub fn min_positive_normal() -> f32 {
     1.17549435e-38
 }

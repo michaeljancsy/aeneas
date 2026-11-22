@@ -238,10 +238,10 @@ comparisons: `==` and `!=` give `NaN != NaN` and `0.0 == -0.0`, and `<`, `<=`, `
 and `>=` are false when either side is NaN. Float literals are emitted as exact bit
 patterns, for example `Float32.ofBits 1036831949` for `0.1f32`.
 
-Of the standard library, only `is_finite`, `abs`, `sqrt`, `Clone`, `Copy`,
-`PartialEq`, `PartialOrd` and `Default` have Lean models, plus the methods listed below.
-Other float methods, traits and constants (for example `exp`, `to_bits` and
-`f32::EPSILON`) are extracted as axioms or not supported; write constants as literals.
+Of the standard library, `is_finite`, `abs`, `sqrt`, `Clone`, `Copy`, `PartialEq`,
+`PartialOrd`, `Default` and the methods and constants described below have Lean models.
+Other float methods and traits (for example `exp` and `ln`) are extracted as axioms or
+not supported.
 
 `PartialOrd` (in `Aeneas/Std/FloatOrd.lean`) is used by method calls such as
 `x.partial_cmp(&y)`, by generic code and by `#[derive(PartialOrd)]`: `partial_cmp` is
@@ -278,6 +278,26 @@ semantics:
   also when a bound is NaN;
 - `mul_add` is a fused multiply-add with a single rounding (`Float.fma`).
 These never fail, except `clamp`. NaN payloads are not modelled.
+
+**Bits, classification, sign and constants.** `to_bits`, `from_bits`, `is_nan`,
+`is_infinite`, `is_sign_positive`, `is_sign_negative`, `is_normal`, `is_subnormal`,
+`signum`, `copysign` and `recip` have Lean models for `f32` and `f64`
+(`Aeneas/Std/FloatBits.lean`, for example `core.f32.to_bits`, which returns a `U32`).
+The standard constants are definitions, not axioms (`Aeneas/Std/FloatConsts.lean`):
+`EPSILON`, `MIN`, `MAX`, `MIN_POSITIVE`, `INFINITY`, `NEG_INFINITY`, `RADIX`,
+`MANTISSA_DIGITS`, `DIGITS`, `MIN_EXP`, `MAX_EXP`, `MIN_10_EXP` and `MAX_10_EXP` (as
+`core.f32.F32.EPSILON` and so on, and the legacy `core::f32::EPSILON` as
+`core.f32.EPSILON`), and everything in `core::f32::consts` and `core::f64::consts` (as
+`core.f32.consts.PI` and so on; some, such as `GOLDEN_RATIO`, are unstable in Rust and
+need `more_float_constants`). Each float constant is Rust's exact bit pattern.
+`NAN` is not modelled. Lean's float model has a single NaN, positive with the canonical
+payload (`0x7FC00000`, `0x7FF8000000000000`), so on NaNs these models differ from Rust:
+`to_bits` returns the canonical bits, `from_bits` canonicalises, `is_sign_negative` is
+`false`, `copysign` with a NaN magnitude returns the canonical NaN, `copysign(x, y)`
+with a NaN `y` takes the canonical NaN's positive sign, and `recip` of a NaN is the
+canonical NaN. `signum` of a NaN is the canonical NaN, as in Rust. Proofs about NaN bit
+patterns or NaN signs can therefore disagree with compiled Rust; for other inputs the
+models match Rust exactly.
 
 Not yet supported:
 - NaN literals;

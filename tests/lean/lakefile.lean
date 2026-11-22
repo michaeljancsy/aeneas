@@ -45,6 +45,8 @@ package «tests» {}
 @[default_target] lean_lib Float32TraitsTests
 @[default_target] lean_lib Float64
 @[default_target] lean_lib Float64Bits
+@[default_target] lean_lib FloatBits
+@[default_target] lean_lib FloatBitsModel
 @[default_target] lean_lib FloatCasts
 @[default_target] lean_lib FloatCastsModel
 @[default_target] lean_lib FloatCastsWidths

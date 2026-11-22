@@ -183,7 +183,279 @@ let lean_builtin_types =
     mk_type "core::sync::atomic::AtomicU32" "core.sync.atomic.AtomicU32";
   ]
 
-let lean_builtin_consts = []
+let lean_builtin_consts =
+  [
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 413 *)
+    mk_global "core::f32::DIGITS" "core.f32.DIGITS" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 416 *)
+    mk_global "core::f32::EPSILON" "core.f32.EPSILON" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 440 *)
+    mk_global "core::f32::INFINITY" "core.f32.INFINITY" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 410 *)
+    mk_global "core::f32::MANTISSA_DIGITS" "core.f32.MANTISSA_DIGITS"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 425 *)
+    mk_global "core::f32::MAX" "core.f32.MAX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 437 *)
+    mk_global "core::f32::MAX_10_EXP" "core.f32.MAX_10_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 431 *)
+    mk_global "core::f32::MAX_EXP" "core.f32.MAX_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 419 *)
+    mk_global "core::f32::MIN" "core.f32.MIN" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 434 *)
+    mk_global "core::f32::MIN_10_EXP" "core.f32.MIN_10_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 428 *)
+    mk_global "core::f32::MIN_EXP" "core.f32.MIN_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 422 *)
+    mk_global "core::f32::MIN_POSITIVE" "core.f32.MIN_POSITIVE" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 443 *)
+    mk_global "core::f32::NEG_INFINITY" "core.f32.NEG_INFINITY" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 407 *)
+    mk_global "core::f32::RADIX" "core.f32.RADIX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 377 *)
+    mk_global "core::f32::consts::E" "core.f32.consts.E" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 303 *)
+    mk_global "core::f32::consts::EULER_GAMMA" "core.f32.consts.EULER_GAMMA"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 327 *)
+    mk_global "core::f32::consts::FRAC_1_PI" "core.f32.consts.FRAC_1_PI"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 353 *)
+    mk_global "core::f32::consts::FRAC_1_SQRT_2" "core.f32.consts.FRAC_1_SQRT_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 337 *)
+    mk_global "core::f32::consts::FRAC_1_SQRT_2PI"
+      "core.f32.consts.FRAC_1_SQRT_2PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 363 *)
+    mk_global "core::f32::consts::FRAC_1_SQRT_3" "core.f32.consts.FRAC_1_SQRT_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 373 *)
+    mk_global "core::f32::consts::FRAC_1_SQRT_5" "core.f32.consts.FRAC_1_SQRT_5"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 332 *)
+    mk_global "core::f32::consts::FRAC_1_SQRT_PI"
+      "core.f32.consts.FRAC_1_SQRT_PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 341 *)
+    mk_global "core::f32::consts::FRAC_2_PI" "core.f32.consts.FRAC_2_PI"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 345 *)
+    mk_global "core::f32::consts::FRAC_2_SQRT_PI"
+      "core.f32.consts.FRAC_2_SQRT_PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 307 *)
+    mk_global "core::f32::consts::FRAC_PI_2" "core.f32.consts.FRAC_PI_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 311 *)
+    mk_global "core::f32::consts::FRAC_PI_3" "core.f32.consts.FRAC_PI_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 315 *)
+    mk_global "core::f32::consts::FRAC_PI_4" "core.f32.consts.FRAC_PI_4"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 319 *)
+    mk_global "core::f32::consts::FRAC_PI_6" "core.f32.consts.FRAC_PI_6"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 323 *)
+    mk_global "core::f32::consts::FRAC_PI_8" "core.f32.consts.FRAC_PI_8"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 298 *)
+    mk_global "core::f32::consts::GOLDEN_RATIO" "core.f32.consts.GOLDEN_RATIO"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 401 *)
+    mk_global "core::f32::consts::LN_10" "core.f32.consts.LN_10" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 397 *)
+    mk_global "core::f32::consts::LN_2" "core.f32.consts.LN_2" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 393 *)
+    mk_global "core::f32::consts::LOG10_2" "core.f32.consts.LOG10_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 389 *)
+    mk_global "core::f32::consts::LOG10_E" "core.f32.consts.LOG10_E"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 385 *)
+    mk_global "core::f32::consts::LOG2_10" "core.f32.consts.LOG2_10"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 381 *)
+    mk_global "core::f32::consts::LOG2_E" "core.f32.consts.LOG2_E"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 289 *)
+    mk_global "core::f32::consts::PI" "core.f32.consts.PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 349 *)
+    mk_global "core::f32::consts::SQRT_2" "core.f32.consts.SQRT_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 358 *)
+    mk_global "core::f32::consts::SQRT_3" "core.f32.consts.SQRT_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 368 *)
+    mk_global "core::f32::consts::SQRT_5" "core.f32.consts.SQRT_5"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 293 *)
+    mk_global "core::f32::consts::TAU" "core.f32.consts.TAU" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 267 *)
+    mk_global "core::f32::{f32}::DIGITS" "core.f32.F32.DIGITS" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 235 *)
+    mk_global "core::f32::{f32}::EPSILON" "core.f32.F32.EPSILON" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 251 *)
+    mk_global "core::f32::{f32}::INFINITY" "core.f32.F32.INFINITY"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 263 *)
+    mk_global "core::f32::{f32}::MANTISSA_DIGITS" "core.f32.F32.MANTISSA_DIGITS"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 243 *)
+    mk_global "core::f32::{f32}::MAX" "core.f32.F32.MAX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 283 *)
+    mk_global "core::f32::{f32}::MAX_10_EXP" "core.f32.F32.MAX_10_EXP"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 275 *)
+    mk_global "core::f32::{f32}::MAX_EXP" "core.f32.F32.MAX_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 239 *)
+    mk_global "core::f32::{f32}::MIN" "core.f32.F32.MIN" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 279 *)
+    mk_global "core::f32::{f32}::MIN_10_EXP" "core.f32.F32.MIN_10_EXP"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 271 *)
+    mk_global "core::f32::{f32}::MIN_EXP" "core.f32.F32.MIN_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 247 *)
+    mk_global "core::f32::{f32}::MIN_POSITIVE" "core.f32.F32.MIN_POSITIVE"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 255 *)
+    mk_global "core::f32::{f32}::NEG_INFINITY" "core.f32.F32.NEG_INFINITY"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 259 *)
+    mk_global "core::f32::{f32}::RADIX" "core.f32.F32.RADIX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 199 *)
+    mk_global "core::f64::DIGITS" "core.f64.DIGITS" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 202 *)
+    mk_global "core::f64::EPSILON" "core.f64.EPSILON" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 226 *)
+    mk_global "core::f64::INFINITY" "core.f64.INFINITY" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 196 *)
+    mk_global "core::f64::MANTISSA_DIGITS" "core.f64.MANTISSA_DIGITS"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 211 *)
+    mk_global "core::f64::MAX" "core.f64.MAX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 223 *)
+    mk_global "core::f64::MAX_10_EXP" "core.f64.MAX_10_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 217 *)
+    mk_global "core::f64::MAX_EXP" "core.f64.MAX_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 205 *)
+    mk_global "core::f64::MIN" "core.f64.MIN" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 220 *)
+    mk_global "core::f64::MIN_10_EXP" "core.f64.MIN_10_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 214 *)
+    mk_global "core::f64::MIN_EXP" "core.f64.MIN_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 208 *)
+    mk_global "core::f64::MIN_POSITIVE" "core.f64.MIN_POSITIVE" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 229 *)
+    mk_global "core::f64::NEG_INFINITY" "core.f64.NEG_INFINITY" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 193 *)
+    mk_global "core::f64::RADIX" "core.f64.RADIX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 163 *)
+    mk_global "core::f64::consts::E" "core.f64.consts.E" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 89 *)
+    mk_global "core::f64::consts::EULER_GAMMA" "core.f64.consts.EULER_GAMMA"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 113 *)
+    mk_global "core::f64::consts::FRAC_1_PI" "core.f64.consts.FRAC_1_PI"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 139 *)
+    mk_global "core::f64::consts::FRAC_1_SQRT_2" "core.f64.consts.FRAC_1_SQRT_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 123 *)
+    mk_global "core::f64::consts::FRAC_1_SQRT_2PI"
+      "core.f64.consts.FRAC_1_SQRT_2PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 149 *)
+    mk_global "core::f64::consts::FRAC_1_SQRT_3" "core.f64.consts.FRAC_1_SQRT_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 159 *)
+    mk_global "core::f64::consts::FRAC_1_SQRT_5" "core.f64.consts.FRAC_1_SQRT_5"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 118 *)
+    mk_global "core::f64::consts::FRAC_1_SQRT_PI"
+      "core.f64.consts.FRAC_1_SQRT_PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 127 *)
+    mk_global "core::f64::consts::FRAC_2_PI" "core.f64.consts.FRAC_2_PI"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 131 *)
+    mk_global "core::f64::consts::FRAC_2_SQRT_PI"
+      "core.f64.consts.FRAC_2_SQRT_PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 93 *)
+    mk_global "core::f64::consts::FRAC_PI_2" "core.f64.consts.FRAC_PI_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 97 *)
+    mk_global "core::f64::consts::FRAC_PI_3" "core.f64.consts.FRAC_PI_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 101 *)
+    mk_global "core::f64::consts::FRAC_PI_4" "core.f64.consts.FRAC_PI_4"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 105 *)
+    mk_global "core::f64::consts::FRAC_PI_6" "core.f64.consts.FRAC_PI_6"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 109 *)
+    mk_global "core::f64::consts::FRAC_PI_8" "core.f64.consts.FRAC_PI_8"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 84 *)
+    mk_global "core::f64::consts::GOLDEN_RATIO" "core.f64.consts.GOLDEN_RATIO"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 187 *)
+    mk_global "core::f64::consts::LN_10" "core.f64.consts.LN_10" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 183 *)
+    mk_global "core::f64::consts::LN_2" "core.f64.consts.LN_2" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 179 *)
+    mk_global "core::f64::consts::LOG10_2" "core.f64.consts.LOG10_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 175 *)
+    mk_global "core::f64::consts::LOG10_E" "core.f64.consts.LOG10_E"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 171 *)
+    mk_global "core::f64::consts::LOG2_10" "core.f64.consts.LOG2_10"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 167 *)
+    mk_global "core::f64::consts::LOG2_E" "core.f64.consts.LOG2_E"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 75 *)
+    mk_global "core::f64::consts::PI" "core.f64.consts.PI" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 135 *)
+    mk_global "core::f64::consts::SQRT_2" "core.f64.consts.SQRT_2"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 144 *)
+    mk_global "core::f64::consts::SQRT_3" "core.f64.consts.SQRT_3"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 154 *)
+    mk_global "core::f64::consts::SQRT_5" "core.f64.consts.SQRT_5"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 79 *)
+    mk_global "core::f64::consts::TAU" "core.f64.consts.TAU" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 53 *)
+    mk_global "core::f64::{f64}::DIGITS" "core.f64.F64.DIGITS" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 21 *)
+    mk_global "core::f64::{f64}::EPSILON" "core.f64.F64.EPSILON" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 37 *)
+    mk_global "core::f64::{f64}::INFINITY" "core.f64.F64.INFINITY"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 49 *)
+    mk_global "core::f64::{f64}::MANTISSA_DIGITS" "core.f64.F64.MANTISSA_DIGITS"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 29 *)
+    mk_global "core::f64::{f64}::MAX" "core.f64.F64.MAX" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 69 *)
+    mk_global "core::f64::{f64}::MAX_10_EXP" "core.f64.F64.MAX_10_EXP"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 61 *)
+    mk_global "core::f64::{f64}::MAX_EXP" "core.f64.F64.MAX_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 25 *)
+    mk_global "core::f64::{f64}::MIN" "core.f64.F64.MIN" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 65 *)
+    mk_global "core::f64::{f64}::MIN_10_EXP" "core.f64.F64.MIN_10_EXP"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 57 *)
+    mk_global "core::f64::{f64}::MIN_EXP" "core.f64.F64.MIN_EXP" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 33 *)
+    mk_global "core::f64::{f64}::MIN_POSITIVE" "core.f64.F64.MIN_POSITIVE"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 41 *)
+    mk_global "core::f64::{f64}::NEG_INFINITY" "core.f64.F64.NEG_INFINITY"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatConsts.lean", line: 45 *)
+    mk_global "core::f64::{f64}::RADIX" "core.f64.F64.RADIX" ~can_fail:false;
+  ]
 
 let lean_builtin_funs =
   [
@@ -530,22 +802,74 @@ let lean_builtin_funs =
     mk_fun "core::f32::{f32}::abs" "core.f32.abs" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 189 *)
     mk_fun "core::f32::{f32}::clamp" "core.f32.clamp";
+    (* file: "Aeneas/Std/FloatBits.lean", line: 113 *)
+    mk_fun "core::f32::{f32}::copysign" "core.f32.copysign" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 85 *)
+    mk_fun "core::f32::{f32}::from_bits" "core.f32.from_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 52 *)
     mk_fun "core::f32::{f32}::is_finite" "core.f32.is_finite" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 91 *)
+    mk_fun "core::f32::{f32}::is_infinite" "core.f32.is_infinite"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 88 *)
+    mk_fun "core::f32::{f32}::is_nan" "core.f32.is_nan" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 101 *)
+    mk_fun "core::f32::{f32}::is_normal" "core.f32.is_normal" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 94 *)
+    mk_fun "core::f32::{f32}::is_sign_negative" "core.f32.is_sign_negative"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 97 *)
+    mk_fun "core::f32::{f32}::is_sign_positive" "core.f32.is_sign_positive"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 107 *)
+    mk_fun "core::f32::{f32}::is_subnormal" "core.f32.is_subnormal"
+      ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 184 *)
     mk_fun "core::f32::{f32}::max" "core.f32.max" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 179 *)
     mk_fun "core::f32::{f32}::min" "core.f32.min" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 123 *)
+    mk_fun "core::f32::{f32}::recip" "core.f32.recip" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 118 *)
+    mk_fun "core::f32::{f32}::signum" "core.f32.signum" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 82 *)
+    mk_fun "core::f32::{f32}::to_bits" "core.f32.to_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 21 *)
     mk_fun "core::f64::{f64}::abs" "core.f64.abs" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 142 *)
     mk_fun "core::f64::{f64}::clamp" "core.f64.clamp";
+    (* file: "Aeneas/Std/FloatBits.lean", line: 67 *)
+    mk_fun "core::f64::{f64}::copysign" "core.f64.copysign" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 39 *)
+    mk_fun "core::f64::{f64}::from_bits" "core.f64.from_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Float.lean", line: 18 *)
     mk_fun "core::f64::{f64}::is_finite" "core.f64.is_finite" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 45 *)
+    mk_fun "core::f64::{f64}::is_infinite" "core.f64.is_infinite"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 42 *)
+    mk_fun "core::f64::{f64}::is_nan" "core.f64.is_nan" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 55 *)
+    mk_fun "core::f64::{f64}::is_normal" "core.f64.is_normal" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 48 *)
+    mk_fun "core::f64::{f64}::is_sign_negative" "core.f64.is_sign_negative"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 51 *)
+    mk_fun "core::f64::{f64}::is_sign_positive" "core.f64.is_sign_positive"
+      ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 61 *)
+    mk_fun "core::f64::{f64}::is_subnormal" "core.f64.is_subnormal"
+      ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 137 *)
     mk_fun "core::f64::{f64}::max" "core.f64.max" ~can_fail:false;
     (* file: "Aeneas/Std/FloatRound.lean", line: 132 *)
     mk_fun "core::f64::{f64}::min" "core.f64.min" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 77 *)
+    mk_fun "core::f64::{f64}::recip" "core.f64.recip" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 72 *)
+    mk_fun "core::f64::{f64}::signum" "core.f64.signum" ~can_fail:false;
+    (* file: "Aeneas/Std/FloatBits.lean", line: 36 *)
+    mk_fun "core::f64::{f64}::to_bits" "core.f64.to_bits" ~can_fail:false;
     (* file: "Aeneas/Std/Scalar/Display.lean", line: 58 *)
     mk_fun "core::fmt::num::imp::{core::fmt::Display<i128>}::fmt"
       "core.fmt.num.imp.DisplayI128.fmt";
